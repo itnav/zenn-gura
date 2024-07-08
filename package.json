@@ -1,0 +1,10 @@
+{
+  "name": "zenn-gura",
+  "scripts": {
+    "dev": "zenn preview",
+    "zenn": "zenn"
+  },
+  "dependencies": {
+    "zenn-cli": "^0.1.154"
+  }
+}
