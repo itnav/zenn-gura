@@ -83,7 +83,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
 
 このように、ChatGPT API の回答が画面に表示されていれば成功です！
 
-![デモ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/images/7_app-dev-simple-list/demo.mov?raw=true)
+![デモ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/7_app-dev-simple-list/demo.mov?raw=true)
 
 ## 2. 今の実装の課題
 
