@@ -4,7 +4,7 @@ title: お料理レシピ生成アプリ
 
 まず、この講習で作成する「お料理レシピ生成アプリ」の完成形を見てみましょう。
 
-![お料理レシピ生成アプリ](https://github.com/itnav/zenn-gura/images/nagoya-ai-event-2024-07_b-course/3_app-overview/completed.gif)
+![お料理レシピ生成アプリ](https://github.com/itnav/zenn-gura/books/nagoya-ai-event-2024-07_b-course/images/3_app-overview/completed.gif)
 
 とてもシンプルですね！
 
