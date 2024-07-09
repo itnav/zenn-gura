@@ -6,7 +6,13 @@ title: 【開発】ChatGPT API を使ってみる
 
 ## 1. そもそも API とは？
 
-## 2. ChatGPT API の用意
+## 2. ChatGPT API Key の用意
+
+:::message alert
+ChatGPT の API キーは、絶対に公開してはいけません。公開してしまうと、悪意のあるユーザーによって API が利用され、課金されてしまう可能性があります。
+
+そのため、今回作成したものを Web サイト上に公開する場合は、ChatGPT にリクエストを送る処理をサーバーサイドで行い、そのサーバーサイドの API を呼び出すようにする必要があります。
+:::
 
 ## 3. ChatGPT API を JavaScript から呼び出してみる
 
@@ -75,10 +81,10 @@ console.log(chatGPTAnswer.choices[0].message.content);
 記述が終ったら、Live Server で http://localhost:5500 にアクセスして、コンソールを確認してみましょう。\
 コンソールは http://localhost:5500 を開いた状態で `F12` もしくは `右クリック > 検証 > Console タブ` で確認できます。
 
-うまくいくと、以下のようなログが表示されているはずです！
-![ChatGPT API のレスポンスのログ](/images/nagoya-ai-event-2024-07_b-course/6_app-dev-chatgpt-api/test-request-log.png)
+このようなログが表示されていれば成功です！🔥
+![ChatGPT API のレスポンスのログ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/test-request-response-log.png?raw=true)
 
-実際に "ChatGPT からの回答" は、ChatGPT が返してきた回答が表示されているはずです。\
+実際に "ChatGPT からの回答" のログには、ChatGPT からの回答が表示されているはずです。\
 なんと、この記述だけで ChatGPT API を JavaScript から呼び出すことができました！
 
 前のセクションで解説した通り、機能を扱うための複雑な処理は API を作成した側が実装してくれるので、API を使用する側は少ない記述量で素晴らしい機能を実装できるのです。
@@ -89,10 +95,12 @@ ChatGPT API は普段 Web アプリケーションとして使っている ChatG
 
 ### 後始末
 
-今回は動作の確認のためのコードであるため、実際のアプリケーションでは使いませんので、次のセクションに移る際はこのコードを削除してください。\
-ただし、`const CHAT_GPT_API_KEY` の部分は共通して使用するため、削除せずに残しておいてください。
+今回は動作の確認のためのコードであるため、実際のアプリケーションでは使いませんので、次のセクションに移る際はこのコードを削除してください。
 
-## このセクションの最終ファイル
+## このチャプターの最終コード
+
+以下のコードは、このチャプターの終了時点のものです。
+講座に追いつけなくなった場合は、これらのコードをコピーして貼り付けることで、進行状況に追いつくことができます。
 
 :::details HTML
 
@@ -326,13 +334,7 @@ body {
 :::details JavaScript
 
 ```js:./script.js
-/**
- * 自分専用の ChatGPT API の API Key
- *
- * 注意: この API KEY は公開してはいけません！！
- * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、この処理を削除し、代わりにサーバーサイAPI を呼び出す必要があります。
- */
-const CHAT_GPT_API_KEY = 'sk-xxxx-xxxxxx...';
+
 ```
 
 :::
