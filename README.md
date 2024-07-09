@@ -2,7 +2,7 @@
 
 Gura 専用の Zenn を管理するリポジトリ。
 
-- [Gura Profile](https://zenn.dev/itnav_gura)
+- [Gura Profile](https://zenn.dev/gura_8)
 
 <br />
 
