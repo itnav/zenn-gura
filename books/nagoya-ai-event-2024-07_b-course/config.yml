@@ -1,0 +1,21 @@
+title: '【NAGOYA TEENS AI CAMP 2024/07 B Course】お料理レシピ生成アプリを作ってみよう'
+
+summary: '2024年の7月13日と7月14日に開催される NAGOYA TEENS AI CAMP のBコースの講習で使用する教材です。今回の講習では、ChatGPT APIを組み込んだ「お料理レシピ生成アプリ」の作成を体験することで、AIを活用した Web アプリケーション開発についての知識を深めることを目的としています。'
+
+topics: ['html', 'css', 'javascript', 'chatgpt']
+
+published: false
+
+price: 0
+
+chapters:
+  - 1_intro
+  - 2_web-app
+  - 3_app-overview
+  - 4_app-dev-setup
+  - 5_app-dev-form
+  - 6_app-dev-chatgpt-api
+  - 7_app-dev-simple-list
+  - 8_app-dev-list
+  - 9_app-dev-modal
+  - 10_outro
