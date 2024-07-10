@@ -22,7 +22,7 @@ API は、基本的に `fetch` 関数を使用して呼び出します。\
 まずは `fetch` 関数の形式を確認してみましょう。
 
 ```javascript
-fetch('API の URL', { ...認証情報や質問内容など });
+fetch('API の URL', { ...認証情報や命令内容など });
 ```
 
 第１引数には API の URL を指定し、第２引数にはオプション情報を指定します。\
@@ -42,7 +42,7 @@ const CHAT_GPT_API_KEY = 'sk-xxxx-xxxxxx...';
 // ログを表示
 console.log('Chat GPT にリクエスト中...');
 
-// ChatGPT に質問（リクエスト）
+// ChatGPT に命令（リクエスト）
 const chatGPTResponse = await fetch(
     'https://api.openai.com/v1/chat/completions',
     {
@@ -82,7 +82,7 @@ console.log(chatGPTAnswer.choices[0].message.content);
 コンソールは http://localhost:5500 を開いた状態で `F12` もしくは `右クリック > 検証 > Console タブ` で確認できます。
 
 このようなログが表示されていれば成功です！🔥
-![ChatGPT API のレスポンスのログ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/test-request-response-log.png?raw=true)
+![ChatGPT API のレスポンスのログ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07b-course/assets/6_app-dev-chatgpt-api/test-request-response-log.png?raw=true)
 
 実際に "ChatGPT からの回答" のログには、ChatGPT からの回答が表示されているはずです。\
 なんと、この記述だけで ChatGPT API を JavaScript から呼び出すことができました！

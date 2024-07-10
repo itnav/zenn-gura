@@ -9,7 +9,7 @@ title: 【開発】ChatGPT API でレシピを生成し表示する
 お料理レシピを生成してもらうために、以下のような処理を実装する必要があります。
 
 1. ユーザーが入力した情報を受け取るために、フォーム要素を取得し、フォーム送信時のイベントを監視
-2. ユーザーが入力した情報を添えて、ChatGPT に質問（リクエスト）
+2. ユーザーが入力した情報を添えて、ChatGPT に命令（リクエスト）
 3. ChatGPT から返ってきた回答（レスポンス）を受け取る
 4. リスト要素を取得し、ChatGPT から返ってきた回答を画面に表示
 
@@ -35,8 +35,13 @@ recipeFormElement.addEventListener('submit', async (event) => {
     // リロードされるブラウザの仕様を防ぐ
     event.preventDefault();
 
-    /** レシピを出力させるためのプロンプト */
-    const recipePromptMessage = `
+    /** どういう AI かを設定する */
+    const recipeAIPrompt = `
+        あなたはユーザーの要望を元に、複数の料理のレシピを提案するアシスタントです。
+    `;
+
+    /** レシピを出力させるための命令（リクエスト） */
+    const recipeRequestPrompt = `
         以下の条件から、料理のレシピを提案してください。
         食材: ${recipeFormElement.ingredients.value},
         提供人数: ${recipeFormElement.servings.value},
@@ -57,7 +62,13 @@ recipeFormElement.addEventListener('submit', async (event) => {
             },
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo',
-                messages: [{ role: 'user', content: recipePromptMessage }],
+                messages: [
+                  // ChatGPT がどういった AI かを説明
+                  { role: 'system', content: recipeAIPrompt },
+
+                  // ChatGPT に命令する
+                  { role: 'user', content: recipeRequestPrompt }
+                ],
             }),
         }
     );
@@ -79,7 +90,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
 });
 ```
 
-記述が終ったら、Live Server で http://localhost:5500 にアクセスして、実際にフォームに文字を入力し、「レシピ生成」ボタンをクリックし、ChatGPT に質問して見ましょう。
+記述が終ったら、Live Server で http://localhost:5500 にアクセスして、実際にフォームに文字を入力し、「レシピ生成」ボタンをクリックし、ChatGPT に命令して見ましょう。
 
 このように、ChatGPT API の回答が画面に表示されていれば成功です！
 
@@ -144,7 +155,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
     };
 
     /** レシピを出力させるためのプロンプト */
-    const recipePromptMessage = `
+    const recipeRequestPrompt = `
         以下の条件から、複数の料理のレシピをなるべく多く提案してください。
         ${JSON.stringify(recipeUserInput)}
     `;
@@ -163,7 +174,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
                 body: JSON.stringify({
                     model: 'gpt-3.5-turbo',
                     messages: [
-                        { role: 'user', content: recipePromptMessage },
+                        { role: 'user', content: recipeRequestPrompt },
                     ],
                 }),
             }
@@ -277,7 +288,7 @@ try {
 
 ### C. レシピが表示されたのに、画面が変わらないのでユーザーが気づきにくい
 
-この問題は、ChatGPT API への質問が完了した際に処理画面をスクロールすることで解決できます。
+この問題は、ChatGPT API への命令が完了した際に処理画面をスクロールすることで解決できます。
 
 ```javascript
 // リスト要素にスクロール
@@ -285,4 +296,4 @@ setTimeout(() => recipeListElement.scrollIntoView({ behavior: 'smooth' }));
 ```
 
 setTimeout で囲っている理由としては、新しく追加した要素が表示された後にスクロールしてほしいからです。\
-なぜ、setTimeout か処理を囲むと新しく追加した要素が表示されるのかを理解するためにはというのは DOM の描画処理実行タイミングとイベントループに関する JavaScript の知識が必要になりますのでここでは割愛させていただきますが、興味がある方は、[こちら](https://javascript.info/event-loop#use-case-2-progress-indication) の記事などが参考になるかと思います。
+なぜ、setTimeout か処理を囲むと新しく追加した要素が表示されるのかを理解するためにはというのは DOM の描画処理実行タイミングとイベントループに関する JavaScript の知識が必要が必要になります。
