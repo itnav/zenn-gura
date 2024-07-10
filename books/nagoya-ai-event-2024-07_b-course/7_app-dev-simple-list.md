@@ -1,8 +1,8 @@
 ---
-title: 【開発】ChatGPT API でレシピを生成し表示する
+title: 【開発】ChatGPT API でレシピを生成し表示する機能
 ---
 
-## 1. レシピを生成し表示するコードを書く
+## 実装
 
 さて、次は ChatGPT API にお料理レシピを生成してもらうい、さらに結果を表示する機能を実装していきましょう。
 
@@ -22,7 +22,8 @@ title: 【開発】ChatGPT API でレシピを生成し表示する
  * 注意: この API KEY は公開してはいけません！！
  * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、この処理を削除し、代わりにサーバーサイAPI を呼び出す必要があります。
  */
-const CHAT_GPT_API_KEY = 'sk-xxxx-xxxxxx...';
+const CHAT_GPT_API_KEY =
+    'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
@@ -90,7 +91,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
 });
 ```
 
-記述が終ったら、Live Server で http://localhost:5500 にアクセスして、実際にフォームに文字を入力し、「レシピ生成」ボタンをクリックし、ChatGPT に命令して見ましょう。
+記述が完了したら、ファイルを保存し Live Server で http://localhost:5500 にアクセスして、実際にフォームに文字を入力し、「レシピ生成」ボタンをクリックし、ChatGPT に命令して見ましょう。
 
 このように、ChatGPT API の回答が画面に表示されていれば成功です！
 
@@ -112,7 +113,9 @@ B. 「レシピ生成」ボタンが連打できてしまう
 C. レシピが表示されたのに、画面が変わらないのでユーザーが気づきにくい
 D. ユーザーが入力した情報を ChatGPT に伝える際、人間にとってわかりやすい形になっているため、ChatGPT が誤解することがある
 
-### 解決後のコード
+### A. エラーが発生しても UI が変わらないのでユーザーは何もわからない
+
+## 3. 課題を解決する
 
 最初に、これらの課題をすべてのコードを解決したコードを記述して見ましょう。
 
@@ -238,8 +241,6 @@ recipeFormElement.addEventListener('submit', async (event) => {
 さらに、エラー時の対応も含んでいるので、もしエラーが発生してもユーザーにわかりやすく表示されるようになりました。
 
 さて、どのように課題を解決したのか、それぞれの課題について詳しく見ていきましょう。
-
-### A. エラーが発生しても UI が変わらないのでユーザーは何もわからない
 
 ### B.「レシピ生成」ボタンが連打できてしまう問題
 
