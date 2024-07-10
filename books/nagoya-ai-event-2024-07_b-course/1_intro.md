@@ -71,7 +71,7 @@ VSCode 右下の「Go Live」をクリックすることで、`http://localhost:
 
 コードのフォーマットを自動で整えてくれる拡張機能です。
 
-[VSCode Prettier 拡張機能](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) か、Install ボタンをクリックするとインストールできます。
+[VSCode Prettier 拡張機能](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) から、Install ボタンをクリックするとインストールできます。
 
 #### 3. VSCode の Material Icon Theme 拡張機能
 
