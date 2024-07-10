@@ -49,6 +49,8 @@ Material Icons Theme 拡張機能をインストールしている場合、フ�
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
 
+  "explorer.sortOrderLexicographicOptions": "unicode",
+
   "prettier.printWidth": 80,
   "prettier.tabWidth": 2,
   "prettier.useTabs": false,
