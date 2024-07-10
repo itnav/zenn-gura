@@ -14,21 +14,27 @@ ChatGPT の API キーは、絶対に公開してはいけません。公開し�
 そのため、今回作成したものを Web サイト上に公開する場合は、ChatGPT にリクエストを送る処理をサーバーサイドで行い、そのサーバーサイドの API を呼び出すようにする必要があります。
 :::
 
-## ChatGPT API を JavaScript から呼び出してみる
+## ChatGPT API を JavaScript から呼び出す
 
-さっそく、ChatGPT API を JavaScript から呼び出してみましょう。
+### 方法の確認
 
-API は、基本的に `fetch` 関数を使用して呼び出します。\
+まず、コードを書く前に、どうやって ChatGPT API を JavaScript から呼び出すのかを確認してみましょう。
+
+ChatGPT API にかかわらず、一般的な API は **`fetch`** 関数を使用することで呼び出す（実行する）ことができます。\
 まずは `fetch` 関数の形式を確認してみましょう。
 
 ```javascript
-fetch('API の URL', { ...認証情報や命令内容など });
+fetch('https://~ などの URL', { ...認証情報や API に一緒に送信したい情報など });
 ```
 
 第１引数には API の URL を指定し、第２引数にはオプション情報を指定します。\
-以外とシンプルです。
+使い方は以上です。思ったよりシンプルではないでしょうか？
 
-この構文を頭に入れながら、ChatGPT API を呼び出すだけの JavaScript を `./script.js` に書いてみましょう。
+では、次に実際のコードを動かして、より体系的に理解していきましょう。
+
+### コードを書いて実験してみる
+
+fetch 関数の構文を頭に入れながら、ChatGPT API を呼び出すだけの JavaScript を `./script.js` に書いてみましょう。
 
 ```javascript:./script.js
 /**
