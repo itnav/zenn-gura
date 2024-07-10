@@ -37,7 +37,8 @@ fetch('API の URL', { ...認証情報や命令内容など });
  * 注意: この API KEY は公開してはいけません！！
  * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、この処理を削除し、代わりにサーバーサイAPI を呼び出す必要があります。
  */
-const CHAT_GPT_API_KEY = 'sk-xxxx-xxxxxx...';
+const CHAT_GPT_API_KEY =
+    'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
 // ログを表示
 console.log('Chat GPT にリクエスト中...');
@@ -81,7 +82,7 @@ console.log(chatGPTAnswer.choices[0].message.content);
 記述が完了したら、ファイルを保存し Live Server で http://localhost:5500 にアクセスして、コンソールを確認してみましょう。\
 コンソールは http://localhost:5500 を開いた状態で `F12` もしくは `右クリック > 検証 > Console タブ` で確認できます。
 
-![ChatGPT API のレスポンスのログ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07b-course/assets/6_app-dev-chatgpt-api/test-request-response-log.png?raw=true)
+![ChatGPT API のレスポンスのログ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/test-request-response-log.png?raw=true)
 
 ↑ 上のようなログが表示されていれば成功です！🔥
 
