@@ -11,11 +11,16 @@ title: はじめに
 ## この講習を通して学べること
 
 1. **HTML と CSS の基本**
-   - フォームの作成やスタイリングを通じて、HTML と CSS の基本的な使い方を学びます。
-2. **JavaScript の基本**
-   - フォームのデータを取得し、API に送信するための JavaScript の基本的な使い方を学びます。
-3. **ChatGPT API の利用方法**
+
+   - アプリケーションの骨組みの作成や見た目のスタイリングを通じて、HTML と CSS の基本的な使い方を学びます。
+
+2. **ChatGPT API の利用方法**
+
    - ChatGPT API を使って、ユーザーの入力に基づいた応答を生成する方法を学びます。
+
+3. **Web アプリケーションを作成する際の実践的な JavaScript の使い方**
+
+   - ChatGPT API をアプリケーションに組み込むことで、JavaScript を使ったデータの取得や表示方法を学びます。
 
 ## 進め方
 
@@ -71,6 +76,12 @@ VSCode のスペルチェック機能を有効にする拡張機能です。英�
 
 [VSCode Code Spell Checker 拡張機能](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) をクリックし、Install ボタンをクリックするとインストールできます。
 
-### 7. お好きな Browser の最新版
+### 7. VSCode の ES6 String HTML 拡張機能
+
+ES6 のテンプレートリテラルを使用して HTML を記述する際に、シンタックスハイライトを有効にする拡張機能です。
+
+[VSCode ES6 String HTML 拡張機能](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html) をクリックし、Install ボタンをクリックするとインストールできます。
+
+### 8. お好きな Browser の最新版
 
 お好きなブラウザの最新版をご用意ください。
