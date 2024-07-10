@@ -7,17 +7,17 @@ title: 【開発】ChatGPT API でレシピをより詳細に表示する
 
 そこで、今回は ChatGPT から、より詳細なレシピの情報を取得し、それを表示するまでの実装を行っていきます。
 
-## 1. より詳細なレシピの情報を取得するためには
+## より詳細なレシピの情報を取得するためには
 
 まずは、ChatGPT API からレシピの詳細情報を取得する処理を実装していきます。
 
 ChatGPT API から、より詳細な情報を取得するためには、以下のアプローチを取ることができます。
 
-- ChatGPT に対して、回答の例を提示する
-- ChatGPT に対して、回答の例に対する説明を提示する
-- ChatGPT に対して、どういった形式で回答を返してほしいかを提示する（詳細なデータをプログラム上で理解できるようにするため）
+1. ChatGPT に対して、回答の例を提示する
+2. ChatGPT に対して、回答の例に対する説明を提示する
+3. ChatGPT に対して、どういった形式で回答を返してほしいかを提示する（詳細なデータをプログラム上で理解できるようにするため）
 
-## 2. プロンプトを改善するコードを書く
+## プロンプトを改善するコードを書く
 
 ```javascript:./script.js
 // フォームの要素を取得
@@ -25,9 +25,6 @@ const recipeFormElement = document.getElementById('recipe-form');
 
 // レシピのリストを取得
 const recipeListElement = document.getElementById('recipe-list');
-
-// モーダルのリストを取得
-const recipeModalElement = document.getElementById('recipe-modal');
 
 // Recipe Form が Submit された時に第２引数の関数を実行するように設定
 recipeFormElement.addEventListener('submit', async (event) => {
