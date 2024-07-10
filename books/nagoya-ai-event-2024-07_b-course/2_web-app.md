@@ -51,7 +51,7 @@ function logMessage() {
 logMessage();
 ```
 
-### 建物の例え
+### 🏠 建物の例え
 
 ![建物で例えた３要素](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/2_web-app/three-building-elements.png?raw=true)
 
