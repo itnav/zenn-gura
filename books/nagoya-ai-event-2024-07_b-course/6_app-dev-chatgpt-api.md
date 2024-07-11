@@ -34,17 +34,27 @@ fetch('https://~ などの URL', { ...認証情報や API に一緒に送信し�
 
 ### 📝 コードを書いて実験してみる
 
-fetch 関数の構文を頭に入れながら、ChatGPT API を呼び出すだけの JavaScript を `./script.js` に書いてみましょう。
+まず、ChatGPT の API Key を `./secret.js` に記述しましょう。
 
-```javascript:./script.js
+```javascript:./secret.js
 /**
  * 自分専用の ChatGPT API の API Key
  *
- * 注意: この API KEY は公開してはいけません！！
- * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、この処理を削除し、代わりにサーバーサイAPI を呼び出す必要があります。
+ * 注意: この API Key は公開してはいけません！！
+ * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります
  */
-const CHAT_GPT_API_KEY =
+export const CHAT_GPT_API_KEY =
     'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+```
+
+:::message
+'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' の部分は、ご自身の ChatGPT の API キーを記述してください。
+:::
+
+そのあと、fetch 関数の構文を頭に入れながら、ChatGPT API を呼び出すだけの JavaScript を `./script.js` に書いてみましょう。
+
+```javascript:./script.js
+import { CHAT_GPT_API_KEY } from './secret.js';
 
 // ログを表示
 console.log('Chat GPT にリクエスト中...');
@@ -110,10 +120,6 @@ console.log(chatGPTAnswer.choices[0].message.content);
 ### ➡️ さらに試してみる
 
 ChatGPT API は普段 Web アプリケーションとして使っている ChatGPT と同じように使うことができるので、試しに「こんにちは！」というメッセージを好きなメッセージに変更し、もう一度ページをリロードしてみると、異なる回答が表示されるはずです。試して見ましょう！
-
-### 🧹 後始末
-
-今回は動作の確認のためのコードであるため、実際のアプリケーションでは使いませんので、次のセクションに移る際はこのコードを削除してください。
 
 <br />
 
@@ -555,8 +561,63 @@ body {
 
 :::details JavaScript
 
-```js:./script.js
+```javascript:./secret.js
+/**
+ * 自分専用の ChatGPT API の API Key
+ *
+ * 注意: この API Key は公開してはいけません！！
+ * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります
+ */
+export const CHAT_GPT_API_KEY =
+    'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+```
 
+```javascript:./script.js
+import { CHAT_GPT_API_KEY } from './secret.js';
+
+// ログを表示
+console.log('Chat GPT にリクエスト中...');
+
+// ChatGPT に命令（リクエスト）
+const chatGPTResponse = await fetch(
+    'https://api.openai.com/v1/chat/completions',
+    {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${CHAT_GPT_API_KEY}`,
+        },
+        body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [
+                // ChatGPT がどういった AI かを説明
+                {
+                  role: 'system',
+                  content: 'あなたは、元気よく挨拶する AI です！'
+                },
+
+                // ChatGPT にメッセージを送信
+                {
+                    role: 'user',
+                    content: 'こんにちは！',
+                },
+            ],
+        }),
+    }
+);
+
+// ChatGPT からの回答（レスポンス）を取得
+const chatGPTAnswer = await chatGPTResponse.json();
+
+// ログに ChatGPT API の回答（レスポンス）を表示
+console.log('\n--------');
+console.log('ChatGPT からの回答の全データ');
+console.log(chatGPTAnswer);
+
+// ログに ChatGPT API の回答を表示
+console.log('\n--------');
+console.log('ChatGPT からの回答');
+console.log(chatGPTAnswer.choices[0].message.content);
 ```
 
 :::

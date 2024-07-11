@@ -132,14 +132,7 @@ recipeListElement.innerText = recipes;
 では、レシピを生成して表示する機能を実際したコードを `./script.js` に記述してみましょう。
 
 ```javascript:./script.js
-/**
- * 自分専用の ChatGPT API の API Key
- *
- * 注意: この API KEY は公開してはいけません！！
- * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、この処理を削除し、代わりにサーバーサイAPI を呼び出す必要があります。
- */
-const CHAT_GPT_API_KEY =
-    'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+import { CHAT_GPT_API_KEY } from './secret.js';
 
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
@@ -180,11 +173,11 @@ recipeFormElement.addEventListener('submit', async (event) => {
             body: JSON.stringify({
                 model: 'gpt-3.5-turbo',
                 messages: [
-                  // ChatGPT がどういった AI かを説明
-                  { role: 'system', content: recipeAIPrompt },
+                    // ChatGPT がどういった AI かを説明
+                    { role: 'system', content: recipeAIPrompt },
 
-                  // ChatGPT に命令する
-                  { role: 'user', content: recipeRequestPrompt }
+                    // ChatGPT に命令する
+                    { role: 'user', content: recipeRequestPrompt },
                 ],
             }),
         }
@@ -206,9 +199,9 @@ recipeFormElement.addEventListener('submit', async (event) => {
 
 記述が完了したら、ファイルを保存し Live Server で http://localhost:5500 にアクセスして、実際にフォームに文字を入力し、「レシピ生成」ボタンをクリックし、ChatGPT に命令して見ましょう。
 
-このように、ChatGPT API の回答が画面に表示されていれば成功です！
-
 ![デモ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/7_app-dev-simple-list/demo.gif?raw=true)
+
+このように、ChatGPT API の回答が画面に表示されていれば成功です！
 
 ## もっとアプリケーションっぽくする
 
@@ -360,14 +353,7 @@ https://reffect.co.jp/html/what_is_json
 さあ、それらの課題の解決策を実装したコードを、`./script.js` に記述してみましょう。
 
 ```javascript:./script.js
-/**
- * 自分専用の ChatGPT API の API Key
- *
- * 注意: この API KEY は公開してはいけません！！
- * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、この処理を削除し、代わりにサーバーサイAPI を呼び出す必要があります。
- */
-const CHAT_GPT_API_KEY =
-    'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+import { CHAT_GPT_API_KEY } from './secret.js';
 
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
@@ -398,6 +384,11 @@ recipeFormElement.addEventListener('submit', async (event) => {
         そのほかの要望: recipeFormElement.notes.value,
     };
 
+    /** どういう AI かを設定する */
+    const recipeAIPrompt = `
+        あなたはユーザーの要望を元に、複数の料理のレシピを提案するアシスタントです。
+    `;
+
     /** レシピを出力させるためのプロンプト */
     const recipeRequestPrompt = `
         以下の条件から、複数の料理のレシピをなるべく多く提案してください。
@@ -418,6 +409,10 @@ recipeFormElement.addEventListener('submit', async (event) => {
                 body: JSON.stringify({
                     model: 'gpt-3.5-turbo',
                     messages: [
+                        // ChatGPT がどういった AI かを説明
+                        { role: 'system', content: recipeAIPrompt },
+
+                        // ChatGPT に命令する
                         { role: 'user', content: recipeRequestPrompt },
                     ],
                 }),
@@ -470,7 +465,11 @@ recipeFormElement.addEventListener('submit', async (event) => {
 });
 ```
 
-記述が終ったら、Live Server で http://localhost:5500 にアクセスして、どこが変わったか、確認して見ましょう。
+記述が終ったら、Live Server で http://localhost:5500 にアクセスして確認して見ましょう。
+
+![修正後のデモ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/7_app-dev-simple-list/fixed-demo.gif?raw=true)
+
+このように、UI に変化が現れたり勝手にスクロールされれば成功です！
 
 どうですか？ UI に変化を加えるだけでも、一気に「アプリケーション感」が増しましたね！\
 さらに、エラー時の対応も含んでいるので、もしエラーが発生してもユーザーにわかりやすく表示されるようになりました。
@@ -915,20 +914,24 @@ body {
 
 :::details JavaScript
 
-```js:./script.js
+```javascript:./secret.js
 /**
  * 自分専用の ChatGPT API の API Key
  *
- * 注意: この API KEY は公開してはいけません！！
- * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、この処理を削除し、代わりにサーバーサイAPI を呼び出す必要があります。
+ * 注意: この API Key は公開してはいけません！！
+ * ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります
  */
-const CHAT_GPT_API_KEY =
+export const CHAT_GPT_API_KEY =
     'sk-xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+```
+
+```javascript:./script.js
+import { CHAT_GPT_API_KEY } from './secret.js';
 
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
 
-// リストの要素を取得
+// レシピの要素を取得
 const recipeListElement = document.getElementById('recipe-list');
 
 // Recipe Form が Submit された時に第２引数の関数を実行するように設定
@@ -954,6 +957,11 @@ recipeFormElement.addEventListener('submit', async (event) => {
         そのほかの要望: recipeFormElement.notes.value,
     };
 
+    /** どういう AI かを設定する */
+    const recipeAIPrompt = `
+        あなたはユーザーの要望を元に、複数の料理のレシピを提案するアシスタントです。
+    `;
+
     /** レシピを出力させるためのプロンプト */
     const recipeRequestPrompt = `
         以下の条件から、複数の料理のレシピをなるべく多く提案してください。
@@ -974,6 +982,10 @@ recipeFormElement.addEventListener('submit', async (event) => {
                 body: JSON.stringify({
                     model: 'gpt-3.5-turbo',
                     messages: [
+                        // ChatGPT がどういった AI かを説明
+                        { role: 'system', content: recipeAIPrompt },
+
+                        // ChatGPT に命令する
                         { role: 'user', content: recipeRequestPrompt },
                     ],
                 }),

@@ -147,6 +147,8 @@ CSS 同様、HTML には自動で JavaScript を読み込む機能は備わっ�
 
 記述が完了したら、ファイルを保存し Live Server で http://localhost:5500 にアクセスして、フォームなどが実際に配置されていることを確認してみましょう！
 
+![HTML の完成形](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/5_app-dev-html-css/html.png?raw=true)
+
 以上で、HTML によるアプリケーションの骨組み作成は完了です。\
 続いて CSS を使ってアプリケーションの見た目を整えていきましょう。
 
@@ -512,6 +514,8 @@ body {
 ```
 
 記述が完了したら、ファイルを保存し Live Server で http://localhost:5500 にアクセスして、アプリケーションの見た目がかっこよくなっていることを確認しましょう！
+
+![CSS の完成形](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/5_app-dev-html-css/css.png?raw=true)
 
 以上で、CSS によるアプリケーションの見た目作成は完了です。
 
@@ -951,7 +955,11 @@ body {
 
 :::details JavaScript
 
-```js:./script.js
+```javascript:./secret.js
+
+```
+
+```javascript:./script.js
 
 ```
 
