@@ -330,7 +330,8 @@ setTimeout で囲っている理由としては、新しく追加した要素が
 
 この問題は、広く使用されている形式でフォーマットした文字列を ChatGPT に伝えることで解決できます。
 
-今回は `JSON.stringify()` メソッドを使用して、オブジェクトを JSON 形式の文字列に変換しています。
+今回は `JSON.stringify()` メソッドを使用して、オブジェクトを JSON 形式の文字列に変換しています。\
+ChatGPT には文字列しか命令を送ることができないので、オブジェクトを文字列に変換する必要があります。
 
 ```javascript
 /** ユーザーの入力情報をまとめたオブジェクト */
@@ -371,7 +372,7 @@ const CHAT_GPT_API_KEY =
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
 
-// レシピのリストを取得
+// レシピの要素を取得
 const recipeListElement = document.getElementById('recipe-list');
 
 // Recipe Form が Submit された時に第２引数の関数を実行するように設定
@@ -439,9 +440,6 @@ recipeFormElement.addEventListener('submit', async (event) => {
 
         // レシピリストの要素に回答を表示する
         recipeListElement.innerText = recipes;
-
-        // ログを表示
-        console.log('レシピを表示しました。', recipes);
 
         // ↓ エラー時は catch の中の処理が実行される
     } catch (error) {
@@ -933,7 +931,7 @@ const CHAT_GPT_API_KEY =
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
 
-// レシピのリストを取得
+// レシピの要素を取得
 const recipeListElement = document.getElementById('recipe-list');
 
 // Recipe Form が Submit された時に第２引数の関数を実行するように設定
@@ -1001,9 +999,6 @@ recipeFormElement.addEventListener('submit', async (event) => {
 
         // レシピリストの要素に回答を表示する
         recipeListElement.innerText = recipes;
-
-        // ログを表示
-        console.log('レシピを表示しました。', recipes);
 
         // ↓ エラー時は catch の中の処理が実行される
     } catch (error) {
