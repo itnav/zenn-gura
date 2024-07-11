@@ -16,11 +16,11 @@ ChatGPT の API キーは、絶対に公開してはいけません。公開し�
 
 ## ChatGPT API を JavaScript から呼び出す
 
-### 🧐 方法の確認
+### 🧐 呼び出し方の確認
 
 まず、コードを書く前に、どうやって ChatGPT API を JavaScript から呼び出すのかを確認してみましょう。
 
-ChatGPT API にかかわらず、一般的な API は **`fetch`** 関数を使用することで呼び出す（実行する）ことができます。\
+ChatGPT API に限らず、一般的な API は **`fetch`** 関数を使用することで呼び出す（実行する）ことができます。\
 まずは `fetch` 関数の形式を確認してみましょう。
 
 ```javascript
@@ -91,8 +91,8 @@ console.log('ChatGPT からの回答');
 console.log(chatGPTAnswer.choices[0].message.content);
 ```
 
-記述が完了したら、ファイルを保存し Live Server で http://localhost:5500 にアクセスして、コンソールを確認してみましょう。\
-コンソールは http://localhost:5500 を開いた状態で `F12` もしくは `右クリック > 検証 > Console タブ` で確認できます。
+記述が完了したら、ファイルを保存し Live Server で http://localhost:5500 にアクセスして、開発者ツールのコンソールを確認してみましょう。\
+開発者ツールのコンソールは http://localhost:5500 を開いた状態で `F12` もしくは `右クリック > 検証 > Console タブ` で確認できます。
 
 ![ChatGPT API のレスポンスのログ](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/test-request-response-log.png?raw=true)
 
@@ -102,6 +102,10 @@ console.log(chatGPTAnswer.choices[0].message.content);
 なんと、たったこれだけの記述だけで ChatGPT API を JavaScript から呼び出すことができました！
 
 このように、機能を実装するための複雑な処理は API を作成した側が実装してくれるので、API を使用する側は少ない記述量で素晴らしい機能を実装できるのです。
+
+:::message
+`console.log()` はデバッグ用の関数で、引数に渡した値を開発者ツールのログに表示させることができます。
+:::
 
 ### ➡️ さらに試してみる
 
