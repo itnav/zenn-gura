@@ -144,7 +144,7 @@ const CHAT_GPT_API_KEY =
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
 
-// レシピのリストを取得
+// リストの要素を取得
 const recipeListElement = document.getElementById('recipe-list');
 
 // Recipe Form が Submit された時に第２引数の関数を実行するように設定
@@ -433,10 +433,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
         const recipeAnswer = await recipeResponse.json();
 
         // ChatGPT からの回答をもとに、レシピのリストを取得
-        const recipes = JSON.parse(recipeAnswer.choices[0].message.content);
-
-        // レシピリストの要素を空にする
-        recipeListElement.innerHTML = '';
+        const recipes = recipeAnswer.choices[0].message.content;
 
         // レシピリストの要素に回答を表示する
         recipeListElement.innerText = recipes;
@@ -931,7 +928,7 @@ const CHAT_GPT_API_KEY =
 // フォームの要素を取得
 const recipeFormElement = document.getElementById('recipe-form');
 
-// レシピの要素を取得
+// リストの要素を取得
 const recipeListElement = document.getElementById('recipe-list');
 
 // Recipe Form が Submit された時に第２引数の関数を実行するように設定
@@ -992,10 +989,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
         const recipeAnswer = await recipeResponse.json();
 
         // ChatGPT からの回答をもとに、レシピのリストを取得
-        const recipes = JSON.parse(recipeAnswer.choices[0].message.content);
-
-        // レシピリストの要素を空にする
-        recipeListElement.innerHTML = '';
+        const recipes = recipeAnswer.choices[0].message.content;
 
         // レシピリストの要素に回答を表示する
         recipeListElement.innerText = recipes;
