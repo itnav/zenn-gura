@@ -8,16 +8,34 @@ title: Web アプリケーション
 
 Web アプリケーションは、主に HTML、CSS、JavaScript という３つの技術で構成されています。
 
+### 体系的に学んでみる
+
+HTML, CSS, JavaScript の書き方をサクッと学んでみたい方は、`./html-css-js-basic` のような名前のディレクトリ（フォルダ）を作成し、その中に `index.html`、`style.css`、`script.js` のファイルを作成し、後述するコードを打って練習してみましょう！
+
 ### HTML
 
 HTML（HyperText Markup Language）は、Web ページの構造を定義するために使用されるマークアップ言語です。\
 HTML を使用して、見出し、段落、リンク、画像などの要素をページに追加します。
 
 ```html
-<div class="container">
-  <h1>タイトル</h1>
-  <p>本文</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script type="module" src="./script.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 id="hello">はじめまして！</h1>
+      <p>僕が好きなのはオールマイトです。</p>
+      <span>デクも好きです。</span>
+    </div>
+  </body>
+</html>
 ```
 
 ### CSS
@@ -28,11 +46,13 @@ CSS を使用して、レイアウト、色、フォント、間隔などの視�
 ```css
 .container {
   width: 100%;
-  margin: 0 auto;
 }
 
 h1 {
   color: red;
+}
+h1.active {
+  color: blue;
 }
 ```
 
@@ -42,13 +62,11 @@ JavaScript は、Web ページの動的な振る舞いを定義するために�
 JavaScript を使用して、ユーザーとのインタラクション、アニメーション、データの操作などを行います。
 
 ```javascript
-const message = 'Hello, World!';
+const hello = document.getElementById('hello');
 
-function logMessage() {
-  console.log(message);
-}
-
-logMessage();
+hello.addEventListener('click', () => {
+  hello.classList.toggle('active');
+});
 ```
 
 ### 🏠 建物の例え
