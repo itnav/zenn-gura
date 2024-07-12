@@ -6,7 +6,14 @@ title: 【開発】ChatGPT API を使ってみる
 
 ## そもそも API とは？
 
+TODO: 画像が入る
+
 ## ChatGPT API Key の用意
+
+ChatGPT API を使うためには、API Key が必要です。
+
+以下の記事が参考になります。
+https://excelcamp.jp/ai-bot/media/howto/23133/
 
 :::message alert
 ChatGPT の API キーは、絶対に公開してはいけません。公開してしまうと、悪意のあるユーザーによって API が利用され、課金されてしまう可能性があります。
