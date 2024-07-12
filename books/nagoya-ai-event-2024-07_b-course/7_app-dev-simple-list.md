@@ -21,112 +21,6 @@ title: 【開発】ChatGPT API でレシピを生成し表示する機能
 3. ChatGPT から返ってきた回答（レスポンス）を受け取る
 4. リスト要素を取得し、ChatGPT から返ってきた回答を画面に表示
 
-それぞれ、どのように実装するかを見ていきましょう。
-
-#### 1. ユーザーが入力した情報を受け取るために、フォーム要素を取得し、フォーム送信時のイベントを監視
-
-フォーム要素とは、HTML の `<form id="recipe-form">` 要素のことです。\
-フォーム要素の取得は `document.getElementById` メソッドを使用します。
-
-```javascript
-// HTML の id="recipe-form" の要素を取得
-const recipeFormElement = document.getElementById('recipe-form');
-```
-
-そして、フォーム送信時のイベントを監視するために、`addEventListener` メソッドを使用します。
-
-```javascript
-// フォーム の入力が確定した時に第２引数の関数を実行するように設定
-recipeFormElement.addEventListener('submit', (event) => {
-  // フォームが送信された時の処理
-
-  // 入力されている情報は、recipeFormElement.name属性で指定した名前.value で取得できる。
-  console.log(recipeFormElement.ingredients.value);
-});
-```
-
-#### 2. ユーザーが入力した情報を添えて、ChatGPT に命令（リクエスト）
-
-今回は、ChatGPT に送るメッセージが大きくなってしまうので、あらかじめ変数に格納しておきます。
-
-どういう AI かの説明をする `recipeAiPrompt` 変数と、レシピを出力させるための命令をする `recipeRequestPrompt` 変数の２つを用意します。
-
-```javascript
-/** どういう AI かを設定するための説明 */
-const recipeAIPrompt = `
-    あなたはユーザーの要望を元に、複数の料理のレシピを提案するアシスタントです。
-`;
-
-/** レシピを出力させるための命令（リクエスト） */
-const recipeRequestPrompt = `
-    以下の条件から、料理のレシピを提案してください。
-    食材: ${recipeFormElement.ingredients.value},
-    提供人数: ${recipeFormElement.servings.value},
-    調理時間: ${recipeFormElement.time.value},
-    調理難易度: ${recipeFormElement.difficulty.value},
-    アレルギー情報: ${recipeFormElement.allergies.value},
-    そのほかの要望: ${recipeFormElement.notes.value},
-`;
-```
-
-そして、そのプロンプトをもとに、ChatGPT にリクエストを送信します。
-
-```javascript
-/** @see {@link https://platform.openai.com/docs/api-reference/chat/create} API Reference */
-const recipeResponse = await fetch(
-  'https://api.openai.com/v1/chat/completions',
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${CHAT_GPT_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        // ChatGPT がどういった AI かを説明
-        { role: 'system', content: recipeAIPrompt },
-
-        // ChatGPT に命令する
-        { role: 'user', content: recipeRequestPrompt },
-      ],
-    }),
-  }
-);
-```
-
-#### 3. リスト要素を取得し、ChatGPT から返ってきた回答を画面に表示
-
-`fetch()` 関数実行後の結果は HTTP 通信 の情報であるため、そのままでは ChatGPT の回答が取得できません。\
-そのため、`response.json()` メソッドを使用して、JSON 形式のデータを取得します。
-
-```javascript
-const recipeAnswer = await recipeResponse.json();
-```
-
-さらに、`response.json()` で取得した値は ID や質問者の情報など、回答の以外の情報も含まれているため、抽出する必要があります。
-
-```javascript
-const recipes = recipeAnswer.choices[0].message.content;
-```
-
-#### 4. リスト要素を取得し、ChatGPT から返ってきた回答を画面に表示
-
-リスト要素とは、HTML の `<form id="recipe-list">` 要素のことです。\
-リスト要素の取得は `document.getElementById` メソッドを使用します。
-
-```javascript
-// HTML の id="recipe-list" の要素を取得
-const recipeListElement = document.getElementById('recipe-list');
-```
-
-そして、取得したリスト要素に、ChatGPT から返ってきた回答を表示します。
-
-```javascript
-// レシピリストの要素に回答を表示する
-recipeListElement.innerText = recipes;
-```
-
 ### 📝 コードを記述する
 
 では、レシピを生成して表示する機能を実際したコードを `./script.js` に記述してみましょう。
@@ -203,6 +97,120 @@ recipeFormElement.addEventListener('submit', async (event) => {
 
 このように、ChatGPT API の回答が画面に表示されていれば成功です！
 
+:::details 【深く知りたい人向け】重要な要素の解説
+
+#### 1. ユーザーが入力した情報を受け取るために、フォーム要素を取得し、フォーム送信時のイベントを監視
+
+フォーム要素とは、HTML の `<form id="recipe-form">` 要素のことです。\
+フォーム要素の取得は `document.getElementById` メソッドを使用します。
+
+```javascript
+// HTML の id="recipe-form" の要素を取得
+const recipeFormElement = document.getElementById('recipe-form');
+```
+
+そして、フォーム送信時のイベントを監視するために、`addEventListener` メソッドを使用します。
+
+```javascript
+// フォーム の入力が確定した時に第２引数の関数を実行するように設定
+recipeFormElement.addEventListener('submit', (event) => {
+  // フォームが送信された時の処理
+
+  // 入力されている情報は、recipeFormElement.name属性で指定した名前.value で取得できる。
+  console.log(recipeFormElement.ingredients.value);
+});
+```
+
+ㅤ<!-- 空白文字 -->
+
+#### 2. ユーザーが入力した情報を添えて、ChatGPT に命令（リクエスト）
+
+今回は、ChatGPT に送るメッセージが大きくなってしまうので、あらかじめ変数に格納しておきます。
+
+どういう AI かの説明をする `recipeAiPrompt` 変数と、レシピを出力させるための命令をする `recipeRequestPrompt` 変数の２つを用意します。
+
+```javascript
+/** どういう AI かを設定するための説明 */
+const recipeAIPrompt = `
+    あなたはユーザーの要望を元に、複数の料理のレシピを提案するアシスタントです。
+`;
+
+/** レシピを出力させるための命令（リクエスト） */
+const recipeRequestPrompt = `
+    以下の条件から、料理のレシピを提案してください。
+    食材: ${recipeFormElement.ingredients.value},
+    提供人数: ${recipeFormElement.servings.value},
+    調理時間: ${recipeFormElement.time.value},
+    調理難易度: ${recipeFormElement.difficulty.value},
+    アレルギー情報: ${recipeFormElement.allergies.value},
+    そのほかの要望: ${recipeFormElement.notes.value},
+`;
+```
+
+そして、そのプロンプトをもとに、ChatGPT にリクエストを送信します。
+
+```javascript
+/** @see {@link https://platform.openai.com/docs/api-reference/chat/create} API Reference */
+const recipeResponse = await fetch(
+  'https://api.openai.com/v1/chat/completions',
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${CHAT_GPT_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        // ChatGPT がどういった AI かを説明
+        { role: 'system', content: recipeAIPrompt },
+
+        // ChatGPT に命令する
+        { role: 'user', content: recipeRequestPrompt },
+      ],
+    }),
+  }
+);
+```
+
+ㅤ<!-- 空白文字 -->
+
+#### 3. リスト要素を取得し、ChatGPT から返ってきた回答を画面に表示
+
+`fetch()` 関数実行後の結果は HTTP 通信 の情報であるため、そのままでは ChatGPT の回答が取得できません。\
+そのため、`response.json()` メソッドを使用して、JSON 形式のデータを取得します。
+
+```javascript
+const recipeAnswer = await recipeResponse.json();
+```
+
+さらに、`response.json()` で取得した値は ID や質問者の情報など、回答の以外の情報も含まれているため、抽出する必要があります。
+
+```javascript
+const recipes = recipeAnswer.choices[0].message.content;
+```
+
+ㅤ<!-- 空白文字 -->
+
+#### 4. リスト要素を取得し、ChatGPT から返ってきた回答を画面に表示
+
+リスト要素とは、HTML の `<form id="recipe-list">` 要素のことです。\
+リスト要素の取得は `document.getElementById` メソッドを使用します。
+
+```javascript
+// HTML の id="recipe-list" の要素を取得
+const recipeListElement = document.getElementById('recipe-list');
+```
+
+そして、取得したリスト要素に、ChatGPT から返ってきた回答を表示します。
+
+```javascript
+// レシピリストの要素に回答を表示する
+recipeListElement.innerText = recipes;
+```
+
+:::
+
 ## もっとアプリケーションっぽくする
 
 現在の実装は、問題なく動いていはいますが、アプリケーションとして動かすにはまだ改善の余地があります。
@@ -219,136 +227,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
 3. レシピが表示されたのに、表示している画面に変化がないのでユーザーが気づきにくい
 4. ユーザーが入力した情報を ChatGPT に伝える際、人間にとってわかりやすい形になっているため、ChatGPT が誤解することがある
 
-### 🔅 課題の解決方法
-
-#### 1. エラーが発生しても UI が変わらないのでユーザーは何もわからない
-
-エラーが発生した時に UI を表示するために、まずは「エラーが発生した」といった現象を捉える必要があります。
-
-エラーが発生した時の条件分岐は、`try` `catch` `finally` 構文を使用することで実装できます。
-
-```javascript
-try {
-  // エラーしたことを捉えたい処理を try の中に記述する
-  const recipeResponse = await fetch('...');
-
-  // リクエストが失敗していた場合、throw を実行することで、エラーを発生させる
-  if (!recipeResponse.ok) {
-    // `recipeResponse.json()` で取得できるエラーの詳細を error 変数にセットする
-    throw await recipeResponse.json();
-  }
-
-  // ...省略
-} catch (error) {
-  // エラーが発生した場合の処理を catch で囲む
-
-  // エラーを表示
-  console.error(error);
-
-  // エラーを文字列化
-  const strError =
-    error instanceof Error ? error.message : JSON.stringify(error, null, 2);
-
-  // エラーを表示
-  recipeListElement.innerHTML = /* html */ `
-      <div>
-          <h2 class="recipe-error-title">エラーが発生しました</h2>
-          <pre class="recipe-error-message"><code>${strError}</code></pre>
-      </div>
-  `;
-} finally {
-  // 括弧内の処理（try, catch）が完了したタイミングで実行される
-}
-```
-
-エラー時の処理（`catch`）には、リスト要素の中にエラーが発生したということを表示する HTML を追加しています。
-
-#### 2.「レシピ生成」ボタンが連打できてしまう問題
-
-「レシピ生成」ボタンが連打できてしまう問題は、フォームが送信された後にボタンを無効化することで解決できます。
-
-ボタン無効化の方法はいくつかありますが、今回はボタンをクリックできなくする CSS のクラスを定義しておき、フォームが送信された後にそのクラスを追加する方法を採用します。
-
-```javascript
-// 処理中ということを示すために loading クラスを追加
-recipeFormElement.classList.add('loading');
-```
-
-```css
-/** loading がついているときだけ、このクラスが適応される */
-.loading .recipe-form-submitter {
-  pointer-events: none; /** pointer-events: none; が付与されると、クリックできなくなる */
-  cursor: not-allowed;
-  background-color: #d6e3ed;
-}
-```
-
-また、もしスタイルが反映されずボタンを押された時などにも処理が走らないようにするために、以下のコードを最初の処理に追記しています。
-
-```javascript
-// 処理中は、重複して処理が実行されないように loading クラスがついていたら処理を中断する
-if (recipeFormElement.classList.contains('loading')) {
-  return;
-}
-```
-
-最後に、処理が終わった後に loading クラスを削除することで、ボタンが再度クリックできるようになります。\
-これは、処理の成功時・エラー時、どちらでも発火してほしいので `finally` の中に記述します。
-
-```javascript
-try {
-  ...省略
-
-} catch {
-  ...省略
-
-} finally {
-  // loading クラスを削除
-  recipeFormElement.classList.remove('loading');
-}
-```
-
-#### 3. レシピが表示されたのに、表示している画面に変化がないのでユーザーが気づきにくい
-
-この問題は、ChatGPT API への命令が完了した際に処理画面をスクロールすることで解決できます。
-
-```javascript
-// リスト要素にスクロール
-setTimeout(() => recipeListElement.scrollIntoView({ behavior: 'smooth' }));
-```
-
-setTimeout で囲っている理由としては、新しく追加した要素が表示された後にスクロールしてほしいからです。
-
-#### 4. ユーザーが入力した情報を ChatGPT に伝える際、人間にとってわかりやすい形になっているため、ChatGPT が誤解することがある
-
-この問題は、広く使用されている形式でフォーマットした文字列を ChatGPT に伝えることで解決できます。
-
-今回は `JSON.stringify()` メソッドを使用して、オブジェクトを JSON 形式の文字列に変換しています。\
-ChatGPT には文字列しか命令を送ることができないので、オブジェクトを文字列に変換する必要があります。
-
-```javascript
-/** ユーザーの入力情報をまとめたオブジェクト */
-const recipeUserInput = {
-  食材: recipeFormElement.ingredients.value,
-  提供人数: recipeFormElement.servings.value,
-  調理時間: recipeFormElement.time.value,
-  調理難易度: recipeFormElement.difficulty.value,
-  アレルギー情報: recipeFormElement.allergies.value,
-  そのほかの要望: recipeFormElement.notes.value,
-};
-
-/** レシピを出力させるためのプロンプト */
-const recipeRequestPrompt = `
-    以下の条件から、複数の料理のレシピをなるべく多く提案してください。
-    ${JSON.stringify(recipeUserInput)}
-`;
-```
-
-`JSON` について詳しく知りたい方は、以下のリンクを参考にしてください。
-
-https://reffect.co.jp/html/what_is_json
-
-### 📝 解決後のコードを記述する
+### 📝 課題解決後のコードを記述する
 
 さあ、それらの課題の解決策を実装したコードを、`./script.js` に記述してみましょう。
 
@@ -473,6 +352,143 @@ recipeFormElement.addEventListener('submit', async (event) => {
 
 どうですか？ UI に変化を加えるだけでも、一気に「アプリケーション感」が増しましたね！\
 さらに、エラー時の対応も含んでいるので、もしエラーが発生してもユーザーにわかりやすく表示されるようになりました。
+
+:::details 【深く知りたい人向け】課題の解決方法
+
+#### 1. エラーが発生しても UI が変わらないのでユーザーは何もわからない
+
+エラーが発生した時に UI を表示するために、まずは「エラーが発生した」といった現象を捉える必要があります。
+
+エラーが発生した時の条件分岐は、`try` `catch` `finally` 構文を使用することで実装できます。
+
+```javascript
+try {
+  // エラーしたことを捉えたい処理を try の中に記述する
+  const recipeResponse = await fetch('...');
+
+  // リクエストが失敗していた場合、throw を実行することで、エラーを発生させる
+  if (!recipeResponse.ok) {
+    // `recipeResponse.json()` で取得できるエラーの詳細を error 変数にセットする
+    throw await recipeResponse.json();
+  }
+
+  // ...省略
+} catch (error) {
+  // エラーが発生した場合の処理を catch で囲む
+
+  // エラーを表示
+  console.error(error);
+
+  // エラーを文字列化
+  const strError =
+    error instanceof Error ? error.message : JSON.stringify(error, null, 2);
+
+  // エラーを表示
+  recipeListElement.innerHTML = /* html */ `
+      <div>
+          <h2 class="recipe-error-title">エラーが発生しました</h2>
+          <pre class="recipe-error-message"><code>${strError}</code></pre>
+      </div>
+  `;
+} finally {
+  // 括弧内の処理（try, catch）が完了したタイミングで実行される
+}
+```
+
+エラー時の処理（`catch`）には、リスト要素の中にエラーが発生したということを表示する HTML を追加しています。
+
+ㅤ<!-- 空白文字 -->
+
+#### 2.「レシピ生成」ボタンが連打できてしまう問題
+
+「レシピ生成」ボタンが連打できてしまう問題は、フォームが送信された後にボタンを無効化することで解決できます。
+
+ボタン無効化の方法はいくつかありますが、今回はボタンをクリックできなくする CSS のクラスを定義しておき、フォームが送信された後にそのクラスを追加する方法を採用します。
+
+```javascript
+// 処理中ということを示すために loading クラスを追加
+recipeFormElement.classList.add('loading');
+```
+
+```css
+/** loading がついているときだけ、このクラスが適応される */
+.loading .recipe-form-submitter {
+  pointer-events: none; /** pointer-events: none; が付与されると、クリックできなくなる */
+  cursor: not-allowed;
+  background-color: #d6e3ed;
+}
+```
+
+また、もしスタイルが反映されずボタンを押された時などにも処理が走らないようにするために、以下のコードを最初の処理に追記しています。
+
+```javascript
+// 処理中は、重複して処理が実行されないように loading クラスがついていたら処理を中断する
+if (recipeFormElement.classList.contains('loading')) {
+  return;
+}
+```
+
+最後に、処理が終わった後に loading クラスを削除することで、ボタンが再度クリックできるようになります。\
+これは、処理の成功時・エラー時、どちらでも発火してほしいので `finally` の中に記述します。
+
+```javascript
+try {
+  ...省略
+
+} catch {
+  ...省略
+
+} finally {
+  // loading クラスを削除
+  recipeFormElement.classList.remove('loading');
+}
+```
+
+ㅤ<!-- 空白文字 -->
+
+#### 3. レシピが表示されたのに、表示している画面に変化がないのでユーザーが気づきにくい
+
+この問題は、ChatGPT API への命令が完了した際に処理画面をスクロールすることで解決できます。
+
+```javascript
+// リスト要素にスクロール
+setTimeout(() => recipeListElement.scrollIntoView({ behavior: 'smooth' }));
+```
+
+setTimeout で囲っている理由としては、新しく追加した要素が表示された後にスクロールしてほしいからです。
+
+ㅤ<!-- 空白文字 -->
+
+#### 4. ユーザーが入力した情報を ChatGPT に伝える際、人間にとってわかりやすい形になっているため、ChatGPT が誤解することがある
+
+この問題は、広く使用されている形式でフォーマットした文字列を ChatGPT に伝えることで解決できます。
+
+今回は `JSON.stringify()` メソッドを使用して、オブジェクトを JSON 形式の文字列に変換しています。\
+ChatGPT には文字列しか命令を送ることができないので、オブジェクトを文字列に変換する必要があります。
+
+```javascript
+/** ユーザーの入力情報をまとめたオブジェクト */
+const recipeUserInput = {
+  食材: recipeFormElement.ingredients.value,
+  提供人数: recipeFormElement.servings.value,
+  調理時間: recipeFormElement.time.value,
+  調理難易度: recipeFormElement.difficulty.value,
+  アレルギー情報: recipeFormElement.allergies.value,
+  そのほかの要望: recipeFormElement.notes.value,
+};
+
+/** レシピを出力させるためのプロンプト */
+const recipeRequestPrompt = `
+    以下の条件から、複数の料理のレシピをなるべく多く提案してください。
+    ${JSON.stringify(recipeUserInput)}
+`;
+```
+
+`JSON` について詳しく知りたい方は、以下のリンクを参考にしてください。
+
+https://reffect.co.jp/html/what_is_json
+
+:::
 
 <br />
 
