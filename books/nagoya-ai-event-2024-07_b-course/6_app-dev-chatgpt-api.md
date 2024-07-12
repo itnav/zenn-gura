@@ -10,7 +10,7 @@ TODO: 画像が入る
 
 ## ChatGPT API Key の用意
 
-ChatGPT API を使うためには、API Key が必要です。
+ChatGPT API を使うためには、API Key が必要になります。
 
 以下の記事が参考になります。
 https://excelcamp.jp/ai-bot/media/howto/23133/
