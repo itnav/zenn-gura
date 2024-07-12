@@ -6,7 +6,13 @@ title: 【開発】ChatGPT API を使ってみる
 
 ## そもそも API とは？
 
-TODO: 画像が入る
+![API モンスター Before](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/api-monster-before.png?raw=true)
+
+![API モンスター After](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/api-monster-after.png?raw=true)
+
+![API ロボット Before](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/api-robot-before.png?raw=true)
+
+![API ロボット After](https://github.com/itnav/zenn-gura/blob/main/books/nagoya-ai-event-2024-07_b-course/assets/6_app-dev-chatgpt-api/api-robot-after.png?raw=true)
 
 ## ChatGPT API Key の用意
 
