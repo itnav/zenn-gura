@@ -203,7 +203,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
                             <ul class="recipe-modal-list">${recipe.ingredients.map((ingredient) => /*html*/`<li>${ingredient}</li>`).join('')}</ul>
                         </section>
                         <section class="recipe-modal-section">
-                            <h3 class="recipe-modal-subtitle">材料</h3>
+                            <h3 class="recipe-modal-subtitle">作り方</h3>
                             <ul class="recipe-modal-list">${recipe.steps.map((step) => /*html*/`<li>${step}</li>`).join('')}</ul>
                         </section>
                     </div>
@@ -302,7 +302,7 @@ recipeModalElement.innerHTML = /*html*/ `
             <ul class="recipe-modal-list">${recipe.ingredients.map((ingredient) => /*html*/`<li>${ingredient}</li>`).join('')}</ul>
         </section>
         <section class="recipe-modal-section">
-            <h3 class="recipe-modal-subtitle">材料</h3>
+            <h3 class="recipe-modal-subtitle">作り方</h3>
             <ul class="recipe-modal-list">${recipe.steps.map((step) => /*html*/`<li>${step}</li>`).join('')}</ul>
         </section>
     </div>
@@ -970,7 +970,7 @@ recipeFormElement.addEventListener('submit', async (event) => {
                             <ul class="recipe-modal-list">${recipe.ingredients.map((ingredient) => /*html*/`<li>${ingredient}</li>`).join('')}</ul>
                         </section>
                         <section class="recipe-modal-section">
-                            <h3 class="recipe-modal-subtitle">材料</h3>
+                            <h3 class="recipe-modal-subtitle">作り方</h3>
                             <ul class="recipe-modal-list">${recipe.steps.map((step) => /*html*/`<li>${step}</li>`).join('')}</ul>
                         </section>
                     </div>
