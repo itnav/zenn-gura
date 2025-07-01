@@ -9,18 +9,16 @@ published: true
 price: 0
 
 chapters:
-    - 01_intro
-    - 02_get_started
-    - 03_make_3d_game
-    - 04_create_map_and_robot
-    - 05_secret_and_api
-    - 06_what_is_ai
-    - 07_talk_to_ai_robot
-    - 08_smarter_instructions
-    - 09_debug
-    - 10_challenge_map2
-    - 11_create_original_map
-    - 12_cline_introduction
-    - 13_advanced_map_creation
-    - 14_advanced_challenges
-    - 15_summary
+    - 01.intro
+    - 02.get-started
+    - 03.make-3d-game
+    - 04.create-map-and-robot
+    - 05.secret-and-api
+    - 06.what-is-ai
+    - 07.talk-to-ai-robot
+    - 08.smarter-instructions
+    - 09.debug
+    - 10.create-original-map
+    - 11.cline-setup
+    - 12.cline-original-map
+    - 13.summary
