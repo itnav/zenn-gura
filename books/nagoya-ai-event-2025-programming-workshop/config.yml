@@ -1,4 +1,4 @@
-title: '【筆記中】【NAGOYA TEENS AI CAMP 2025】AI と一緒に宝探しの冒険へ！'
+title: '【NAGOYA TEENS AI CAMP 2025】AI と一緒に宝探しの冒険へ！'
 
 summary: '2025年の名古屋AIユースキャンプで使用する教材です。AIロボットに指示を出して、3Dマップの中で宝探しをするゲームを作ります。'
 
@@ -9,8 +9,9 @@ published: true
 price: 0
 
 chapters:
-    - 01.intro
-    - 02.get-started
+    - 00.intro
+    - 01.environment-setup
+    - 02.base-setup
     - 03.make-3d-game
     - 04.create-map-and-robot
     - 05.secret-and-api
