@@ -1,5 +1,5 @@
 ---
-title: '第2章： ゲーム基盤作成'
+title: 'ゲーム基盤作成'
 ---
 
 ## ゲーム基盤作成
@@ -10,22 +10,26 @@ title: '第2章： ゲーム基盤作成'
 
 ## ファイルを確認する
 
-VSCode の左側のファイル一覧を見てください。以下のファイルがあることを確認しましょう。
+まずは VSCode の左側のファイル一覧を見てください！\
+以前の章で作成したファイルがあることを確認しましょう 🔥
+
+![VSCodeのファイル一覧](/images/nagoya-ai-event-2025-programming-workshop/03_game-base-setup/01_vscode-file-list.png)
 
 <br />
 
 ## 各ファイルの役割
 
-それぞれのファイルがどんな仕事をしているか、簡単に説明します。
+次に、各ファイルがどんな働きをするのか、簡単に見ていきましょう。
+すべてのコードを理解しようとしなくても大丈夫です。「全体として何をやっているか」をつかむことを意識して、コードをコピー＆ペーストで動かしてみてください！
 
-### ai-fetch.js
+### 1. `ai-fetch.js`
 
 Web ブラウザから ChatGPT を呼び出すための処理を記述したファイルです。
 
 :::details ファイルの中身（コピー&ペースト）
 
 ```javascript
-import { movementKeys } from './game.js'; // game.js から movementKeys をインポート
+import { movementKeys } from './game.js';
 
 // movementKeys を使用して正規表現を動的に生成
 const allowedCharsList = Object.values(movementKeys);
@@ -40,7 +44,7 @@ const extractRegex = new RegExp(`[${allowedCharsPattern}]+`, 'g');
  * @param {string} params.apiKey          OpenAI API キー
  * @param {string} params.systemPrompt    AIへのシステムプロンプト
  * @param {string} params.routePrompt     ユーザー提供の経路プロンプト（指示）
- * @returns {Promise<Array<string>|null>} 移動指示の配列（例: ['l', 'r', 'u', 'd']）
+ * @returns {Promise<Array<string>|null>} 移動指示の配列（例: ['↑', '→', '↓', '←']）
  */
 export async function fetchRoutePathWithOpenAI({
     apiKey,
@@ -136,10 +140,9 @@ export async function fetchRoutePathWithOpenAI({
 
 :::
 
-### ai-system-prompt.js
+### 2. `ai-system-prompt.js`
 
-AI ロボットの基本となる「性格」や「ルール」を決めるファイルです。\
-このファイルを変更することで、AI ロボットの性格を変えることができます。
+AI ロボットの基本となる「性格」や「ルール」を決めるファイルです。
 
 :::details ファイルの中身（コピー&ペースト）
 
@@ -220,7 +223,7 @@ export function generateSystemPrompt(mapConfig) {
 
 :::
 
-### game.js
+### 3. `game.js`
 
 3D 迷路を画面に表示するファイルです。\
 Three.js というライブラリを使っており、Web で 3D グラフィックスを表示することができます！
@@ -670,40 +673,35 @@ export function setupPlayerMoverButton({
 
 :::
 
-### secret.js（機密情報の設定）
+### 4. `secret.js`
 
-API キーを設定するためのファイルです。
+ChatGPT を利用するための機密情報を記述するファイルです！\
+後のセクションで正式な値を設定するため、ここでは仮の値を入力しておきます。
 
-:::details コードをコピペする
+:::details ファイルの中身（コピー&ペースト）
 
 ```javascript
-/** OpenAI APIキー */
+/**
+ * OpenAI(ChatGPT) API の Key。
+ *
+ * 注意： この API Key は公開してはいけません！！
+ *       ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります。
+ */
 export const OPENAI_API_KEY = 'sk-ここに配布されたAPIキーを入力';
 ```
 
 :::
 
-後ほど、このファイルの値に API キーを設定します。
+後ほど、このファイルの値に API キーを設定します！
 
 <br />
 
-:::details 【深く知りたい人向け】使用技術について
-
-- **Three.js**: WebGL を使った 3D グラフィックスライブラリ
-- **ES6 モジュール**: JavaScript の最新の書き方
-- **async/await**: 非同期処理の仕組み
-- **Fetch API**: HTTP リクエストを送る仕組み
-
-これらの技術に興味がある人は、ワークショップ後に調べてみてください。
-:::
-
 ## まとめ
 
-これらの基本ファイルが協力して、3D ゲームが動いています！
+これらの基本ファイルが協力して、3D ゲームを動かします！\
+現状はまだ動作しませんが、次の章でマップとロボットを作成していきます！
 
-1.  **ai-fetch.js**: AI と通信
-2.  **ai-system-prompt.js**: AI の設定
-3.  **game.js**: 3D 迷路を表示、ゲーム全体をコントロール
-4.  **secret.js**: API キーのひな形
-
-次の章では、いよいよマップとロボットを作成していきます！
+1.  **ai-fetch.js**: AI と通信するためのファイル
+2.  **ai-system-prompt.js**: AI の設定を記述するファイル
+3.  **game.js**: 3D 迷路を表示、ゲーム全体をコントロールするファイル
+4.  **secret.js**: ChatGPT を利用するための機密情報を記述するファイル

@@ -1,149 +1,278 @@
 ---
-title: '第5章： AIって何だろう？'
+title: 'マップとロボットの作成'
 ---
 
-## AIって何だろう？
+## マップとロボットの作成
 
-ゲームの準備ができたところで、ここで少し「AI」について学びましょう！\
-AI ロボットと上手にコミュニケーションを取るために、AI の基本を理解します！
+いよいよ、3D 迷路のマップとロボットを作成します！\
+コードを書いて、ゲームを表示してみましょう！
 
 <br />
 
-## AIは「人工知能」のこと
+## 必要なフォルダとファイルを作成する
 
-**AI（エーアイ）**は「Artificial Intelligence（アーティフィシャル・インテリジェンス）」の略で、日本語では「**人工知能**」といいます。
+VSCode の下のパネルに「ターミナル」が表示されていることを確認してください！\
+もし表示されていなければ、以下のショートカットキーでターミナルを開きます！
 
-最近だと、ChatGPT だけではなく、Google の Gemini や、Anthropic の Claude など、様々な AI が登場しています！
+- **Windows の場合**: `Ctrl + j`
+- **Mac 場合**: `⌘ (Command) + j`
 
----
+![ターミナルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/01_opened-terminal-panel.png)
 
-> 身近な AIの例を示すイラスト（スマートスピーカー、スマホ、ゲーム画面などを含む）
+お使いのパソコンに合わせて、以下のコマンドをコピーしてターミナルに貼り付け、Enter キーを押してください！
 
----
+**Windows の場合**
 
-<br />
+```bash
+mkdir map-1
+type nul > map-1/ai-route-prompt.js
+type nul > map-1/index.html
+type nul > map-1/map.js
+type nul > map-1/style.css
+```
 
-## AIはどうやって学ぶのか？
+**Mac の場合**
 
-AI は、たくさんの「例」を見て学習します。
+```bash
+mkdir map-1
+touch map-1/ai-route-prompt.js
+touch map-1/index.html
+touch map-1/map.js
+touch map-1/style.css
+```
 
----
+コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
 
-> AIが犬と猫の写真を学習していく様子を示す図解（写真→学習→判断の流れ）
-
----
-
-たとえば、**犬と猫を見分ける AI** を作る場合は以下のような流れになります。
-
-1.  たくさんの犬の写真を見せる
-2.  たくさんの猫の写真を見せる
-3.  違いのパターンを覚える
-4.  新しい写真を見たとき、犬か猫か判断できるようになる
-
-今日使う**迷路を解く AI** も同じです。
-
-TODO: ここの紹介もうちょっと変えれるかも
-TODO: より詳しく説明した方がいい？ひさとに相談してみる
-
-<br />
-
-## AIの得意なこと・苦手なこと
-
-AI にも得意なことと苦手なことがあります。
-
-### 得意なこと ✅
-
-- **繰り返し作業**: 同じことを何度でも正確にできる
-- **パターン認識**: 規則性を見つけるのが得意
-- **大量のデータ処理**: 人間より速く情報を処理
-- **論理的な推論**: ルールに従って考える
-
-### 苦手なこと ❌
-
-- **創造性**: 全く新しいアイデアを生み出すこと
-- **感情理解**: 人の気持ちを本当に理解すること
-- **常識判断**: 当たり前のことが分からないことがある
-- **柔軟な対応**: 想定外の状況への対処
-
----
-
-> AIの得意・不得意を天秤で表したイラスト
-
----
+![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/02_created-files-and-folders.png)
 
 <br />
 
-## 今日使う ChatGPT 3 の特徴
+## コードを記述する
 
-私たちが使う ChatGPT は、特に「**対話**」が得意な AI です。
+それでは、前回の章と同じ要領でコードを記述していきましょう！
 
-ChatGPT ができることは以下のとおりです。
+### 1. `index.html`
 
-- 自然な日本語を理解する
-- 質問に答える
-- 指示を理解して実行する
-- プログラムを生成する
+:::details ファイルの中身（コピー&ペースト）
 
-でも、ChatGPT にも限界があります。
+```html
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI ロボット宝探しゲーム - マップ 1</title>
+        <link rel="stylesheet" href="./style.css" />
+    </head>
+    <body>
+        <div id="container">
+            <h1>🤖 AI ロボット宝探しゲーム - マップ 1</h1>
+            <div id="controls">
+                <button id="startButton">スタート</button>
+                <button id="resetButton">リセット</button>
+            </div>
+            <div id="canvas-container"></div>
+            <div id="status"></div>
+        </div>
 
-- 最新の情報は知らない（学習データの時点まで）
-- 画像や音は理解できない（テキストのみ）
-- 実際の世界とのやり取りはできない
+        <!-- Three.js （3D ライブラリ） -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-TODO: ちょっと微妙？むしろいらないかも？
+        <!-- ゲームのスクリプト -->
+        <script type="module" src="../game.js"></script>
+    </body>
+</html>
+```
+
+:::
+
+### 2. `style.css`
+
+:::details ファイルの中身（コピー&ペースト）
+
+```css
+html,
+body {
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100svh;
+    background-color: #fef3c7;
+}
+
+#game-viewer {
+    width: 80vw;
+    height: 80vh;
+    border-radius: 24px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    box-shadow:
+        0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+#start-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    background-color: #d97706;
+    border: 1px solid rgba(16, 185, 129, 0.1);
+    color: #fff;
+    font-weight: 500;
+}
+#start-button:hover {
+    background-color: #b45309;
+}
+#start-button:active {
+    background-color: #92400e;
+}
+```
+
+:::
+
+### 3. `map.js`
+
+:::details ファイルの中身（コピー&ペースト）
+
+```javascript
+/**
+ * 現在のマップの設定オブジェクトです。
+ *
+ * このオブジェクトのプロパティ値を変更することで、\
+ * マップのレイアウト、スタート/エンド位置、罠の位置を変更できます。
+ *
+ * @type {import("../game").MapConfig}
+ */
+export const mapConfig = {
+    layout: [
+        ['s', 'n', 'n', 'n', 'n', 'n'],
+        ['n', 'n', 't', 'n', 'n', 'n'],
+        ['n', 'n', 'o', 'n', 'n', 'n'],
+        ['n', 'n', 'n', 't', 'n', 'n'],
+        ['n', 'n', 'n', 'n', 'n', 'n'],
+        ['o', 'n', 'n', 'n', 'n', 'e'],
+    ],
+    cell: {
+        s: {
+            type: 'start',
+            color: '#6B7ADB',
+        },
+        e: {
+            type: 'end',
+            color: '#F59E0B',
+        },
+        t: {
+            type: 'trap',
+            color: '#DC2626',
+        },
+        o: {
+            type: 'object',
+            color: '#92400E',
+        },
+        n: {
+            type: 'normal',
+            color: '#D4A574',
+        },
+    },
+};
+```
+
+:::
+
+### 4. `ai-route-prompt.js`
+
+:::details ファイルの中身（コピー&ペースト）
+
+```javascript
+export const routePrompt = `
+    ここに AI ロボットへの指示を書きます！
+`;
+```
+
+:::
 
 <br />
 
-## AIとの上手な付き合い方
+## ゲームを起動してみる
 
-AI ロボットと上手にコミュニケーションを取るコツを紹介します！
+ここまでできたら、一度ゲームを確認してみましょう！
 
-### 1. 明確に伝える
+### 1. すべてのファイルを保存する
 
-- ❌ 「なんとなくゴールに行って」
-- ⭕ 「スタートから前に2マス、右に1マス進んでゴールへ」
+まずは全てのファイルが保存されているか確認しましょう！\
+上のタブのファイル名の右端に ⚪️ がついている場合はセーブされていないことを示しています。
 
-### 2. 前向きな指示を出す
+![セーブできていないファイルのガイド](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/03_unsaved-files.png)
 
-- ❌ 「トラップに落ちないで」
-- ⭕ 「安全な道を選んで進んで」
+ファイルのセーブは、
 
-### 3. 段階的に指示する
+- **Windows の場合**: `Ctrl + s`
+- **Mac の場合**: `⌘ (Command) + s`
 
-- ❌ 一度に全部の指示
-- ⭕ ステップごとに分けて指示
+で行えます！
 
-TODO: 例文をコードブロックで説明すると親切？
+### 2. VSCode の「Go Live」ボタンをクリック
 
-<br />
+続いて、VSCode の右下の「Go Live」ボタンをクリックします。
 
-## AIは道具です
+![Go Live ボタンの位置](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/04_go-live-button-guide.png)
 
-最後に覚えておいてほしいことは、**AI は道具**だということです。
+:::message
+「Go Live」ボタンが見つからない場合は、拡張機能「Live Server」がインストールされていない可能性があります。スタッフに声をかけてください。
+:::
+
+### 3. ブラウザで「map-1」フォルダを選択
+
+「Go Live」ボタンをクリックすると、ブラウザが起動し以下のような画面が表示されます！
+
+![ブラウザでファイル一覧が表示されている画面](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/05_go-live-browser-file-list.png)
+
+この画面で map-1 フォルダをクリックすると...？
 
 ---
 
-> AIを道具として使う人間のイラスト（ハンマーやペンと同じように）
+> 3D 迷路が表示されたゲーム画面のスクリーンショット
 
 ---
 
-AI は人間の代わりではありません。AI は人間のパートナーです。上手に使えば、素晴らしいものが作れます。でも、使い方を決めるのは人間です。
-
-だからこそ、今日みなさんには AI との正しい付き合い方を学んでもらいたいのです。AI を理解し、適切に使いこなすことで、みなさんの可能性は大きく広がります。これからの時代を生きるみなさんにとって、AI は強力な味方となるでしょう。
+3D 迷路とロボットが表示されたら成功です！🎉
 
 <br />
 
-## まとめ
+## よくあるエラーと対処法
 
-今日のゲームでは、みなさんが AI ロボットの「**先生**」になります！
+もしエラーが出た場合は、以下を確認してください。
 
-- どう動くか教える
-- 間違えたら修正する
-- 成功するまで導く
+### パターン１： 画面が真っ白
 
-これが AI プログラミングの面白さです。
+#### 原因
 
-次の章では、いよいよ AI ロボットに指示を出してみましょう。
+- ファイルパスが間違っている
+- JavaScript でエラーが起きている可能性
+
+#### 対処法
+
+1. F12 キーでコンソールを開く
+2. 赤いエラーメッセージを確認
+3. スペルミスがないか確認
+
+### パターン２： Go Live が動かない
+
+#### 原因
+
+- ポート番号の競合
+
+#### 対処法
+
+1. VSCode を再起動
 
 <br />
 
@@ -792,7 +921,12 @@ export function setupPlayerMoverButton({
 :::details ./secret.js
 
 ```javascript
-/** OpenAI API　キー */
+/**
+ * OpenAI(ChatGPT) API の Key。
+ *
+ * 注意： この API Key は公開してはいけません！！
+ *       ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります。
+ */
 export const OPENAI_API_KEY = 'sk-ここに配布されたAPIキーを入力';
 ```
 

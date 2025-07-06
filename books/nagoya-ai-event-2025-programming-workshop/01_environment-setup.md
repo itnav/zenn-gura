@@ -1,5 +1,5 @@
 ---
-title: '第1章： 環境構築'
+title: '環境構築'
 ---
 
 ## 進め方
@@ -18,7 +18,7 @@ title: '第1章： 環境構築'
 この講習では、以下の開発環境を使用します。\
 あらかじめご用意いただけるとスムーズに進めることができます。
 
-### 🍀 必須環境
+### 必須環境
 
 #### 1. VSCode
 
@@ -34,7 +34,7 @@ HTML、CSS、JavaScript などの Web 開発にも最適なエディタで、多
 - **Windows の方**: Microsoft Edge, Google Chrome
 - **Mac の方**: The Browser Company Arc, Google Chrome
 
-### 🌱 推奨環境
+### 推奨環境
 
 #### 1. VSCode の Live Server 拡張機能
 

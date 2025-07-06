@@ -2,7 +2,7 @@ title: '【NAGOYA TEENS AI CAMP 2025】AI と一緒に宝探しの冒険へ！'
 
 summary: '2025年の名古屋AIユースキャンプで使用する教材です。AIロボットに指示を出して、3Dマップの中で宝探しをするゲームを作ります。'
 
-topics: ['ai', 'chatgpt', 'javascript', 'three.js', 'programming']
+topics: ['ai', 'chatgpt', 'javascript', 'threejs', 'programming']
 
 published: true
 
@@ -12,14 +12,17 @@ chapters:
     - 00_intro
     - 01_environment-setup
     - 02_base-setup
-    - 03_make-3d-game
-    - 04_create-map-and-robot
-    - 05_secret-and-api
-    - 06_what-is-ai
-    - 07_talk-to-ai-robot
-    - 08_smarter-instructions
-    - 09_debug
-    - 10_create-original-map
-    - 11_cline-setup
-    - 12_cline-original-map
-    - 13_summary
+    - 03_game-base-setup
+    - 04_map-and-robot-setup
+    - 05_chatgpt-api
+    - 06_game-overview
+    - 07_play-game-standard
+    - 08_play-game-hard
+    - 09_2nd-question
+    - 10_what-is-ai
+    - 11_3nd-question
+    - 12_ai-trivia
+    - 13_create-original-map
+    - 14_cline-setup
+    - 15_cline-original-map
+    - 16_summary
