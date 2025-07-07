@@ -57,20 +57,20 @@ VSCode の下のパネルに、コマンドを入力するための「ターミ�
 **Windows の場合**
 
 ```bash
-type nul > ai-fetch.js
-type nul > ai-system-prompt.js
 type nul > game.js
 type nul > game-model.js
+type nul > ai-fetch.js
+type nul > ai-system-prompt.js
 type nul > secret.js
 ```
 
 **Mac の場合**
 
 ```bash
-touch ai-fetch.js
-touch ai-system-prompt.js
 touch game.js
 touch game-model.js
+touch ai-fetch.js
+touch ai-system-prompt.js
 touch secret.js
 ```
 
@@ -104,5 +104,6 @@ touch secret.js
 ├── ai-fetch.js
 ├── ai-system-prompt.js
 ├── game.js
+├── game-model.js
 └── secret.js
 ```

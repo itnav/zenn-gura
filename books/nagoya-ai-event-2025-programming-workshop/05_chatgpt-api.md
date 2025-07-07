@@ -4,7 +4,7 @@ title: 'ChatGPT API'
 
 ## ChatGPT API
 
-前のセクションで無事に迷路とロボットが表示されましたね！！
+前のセクションで無事にマップとロボットが表示されましたね！！
 ですが、現状のままだとロボットが動きませんね...🤔
 
 これは ChatGPT と通信するための「鍵」が設定されていないからです。\
@@ -51,7 +51,7 @@ API とは "Application Programming Interface" の略で、プログラムから
  * OpenAI(ChatGPT) API の Key。
  *
  * 注意： この API Key は公開してはいけません！！
- *       ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります。
+ *       ローカルで起動して使用する場合は問題ないのですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります。
  */
 export const OPENAI_API_KEY = 'sk-ここに配布されたAPIキーを入力';
 ```
@@ -744,7 +744,7 @@ export function setupPlayerMoverButton({
  * OpenAI(ChatGPT) API の Key。
  *
  * 注意： この API Key は公開してはいけません！！
- *       ローカルで起動して使用する場合は問題ないですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります。
+ *       ローカルで起動して使用する場合は問題ないのですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります。
  */
 export const OPENAI_API_KEY = 'sk-ここに配布されたAPIキーを入力';
 ```
