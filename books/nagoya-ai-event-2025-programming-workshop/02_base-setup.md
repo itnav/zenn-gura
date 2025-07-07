@@ -60,6 +60,7 @@ VSCode の下のパネルに、コマンドを入力するための「ターミ�
 type nul > ai-fetch.js
 type nul > ai-system-prompt.js
 type nul > game.js
+type nul > game-model.js
 type nul > secret.js
 ```
 
@@ -69,6 +70,7 @@ type nul > secret.js
 touch ai-fetch.js
 touch ai-system-prompt.js
 touch game.js
+touch game-model.js
 touch secret.js
 ```
 
