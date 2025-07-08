@@ -8,11 +8,7 @@ title: 'AI ロボットをゴールまで動かそう！'
 
 AI ロボットへの指示は、`ai-route-prompt.js` というファイルに記述します。
 
----
-
-> VS Code の左側サイドバーで map-1 フォルダが展開され ai-route-prompt.js ファイルがハイライトされているスクリーンショット
-
----
+![VS Code の左側サイドバーで map-1 フォルダが展開され ai-route-prompt.js ファイルがハイライトされているスクリーンショット](/images/nagoya-ai-event-2025-programming-workshop/07_play-game-standerd/01_hilighted-ai-route-prompt-file.png)
 
 1.  左側のファイル一覧から「**map-1**」フォルダを開く
 2.  「**ai-route-prompt.js**」をクリック
@@ -52,3 +48,5 @@ export const routePrompt = `
 
 どうでしょう？\
 お宝を獲得することはできましたでしょうか！
+
+このように、指示を日本語で記述してあげることで、AI ロボットが動くようになります！
