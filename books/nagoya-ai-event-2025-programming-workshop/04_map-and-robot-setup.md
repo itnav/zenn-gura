@@ -292,10 +292,10 @@ export const mapConfig = {
 
 ```javascript
 /**
- * 生徒はこのファイルの routePrompt だけを編集してください。
+ * ロボットに指示を出すためのプロンプトです。
  */
 export const routePrompt = `
-    ここに AI ロボットへの指示を書きます！
+    好きなように動いてください！
 `;
 ```
 
@@ -433,12 +433,7 @@ export const OPENAI_API_KEY = 'sk-ここに配布されたAPIキーを入力';
 :::details ./map-1/ai-route-prompt.js
 
 ```javascript
-/**
- * 生徒はこのファイルの routePrompt だけを編集してください。
- */
-export const routePrompt = `
-    ここに AI ロボットへの指示を書きます！
-`;
+
 ```
 
 :::

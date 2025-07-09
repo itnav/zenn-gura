@@ -1397,6 +1397,7 @@ export function generateSystemPrompt(mapConfig) {
         generateLimitedInformationSection(),
         generateNumericalUnderstandingSection(),
         generateStepByStepSection(),
+        generateAmbiguousInstructionSection(),
         generateImplicitInformationSection(),
         generateInterpretationPrinciplesSection(),
         generateExecutionMindsetSection(),
@@ -1503,6 +1504,9 @@ function generateMapLayoutSection(mapConfig) {
                 : cellAlias;
         })
     );
+
+    console.log('maskedLayout');
+    console.log(maskedLayout);
 
     return (
         `## この固有マップのレイアウトの説明\n` +
@@ -1620,6 +1624,25 @@ function generateStepByStepSection() {
 }
 
 /**
+ * 曖昧な指示への対処セクションを生成。
+ *
+ * @returns {string}
+ */
+function generateAmbiguousInstructionSection() {
+    return (
+        `## 曖昧な指示への対処\n` +
+        `以下のような曖昧な指示を受けた場合の対処法：\n` +
+        `- 「好きなように動いて」「自由に動いて」「適当に動いて」など\n` +
+        `  → ランダムな方向に8方向ほど移動する（例：${movementKey.UP}${movementKey.RIGHT}${movementKey.DOWN}）\n` +
+        `- 「探索して」「見て回って」など\n` +
+        `  → 現在位置の周辺を小さく移動する（例：${movementKey.RIGHT}${movementKey.DOWN}${movementKey.LEFT}${movementKey.UP}）\n` +
+        `\n` +
+        `重要： ゴールの位置は不明なので、特定の方向に向かって進むべきではありません。\n` +
+        `曖昧な指示の場合は、移動を最小限に留め、より具体的な指示を待つような動きをしてください。\n`
+    );
+}
+
+/**
  * 暗黙的情報セクションを生成。
  *
  * @returns {string}
@@ -1713,6 +1736,14 @@ export const OPENAI_API_KEY = 'sk-ここに配布されたAPIキーを入力';
 :::
 
 後ほど、このファイルの値に API キーを設定します！
+
+<br />
+
+## ファイルの中身を確認する
+
+ファイルが作成できたら、それぞれのファイルに中身が正しくコピー＆ペーストされているか確認しましょう。
+
+ファイル名をクリックして中身を開き、空っぽになっていないか見てみてください。
 
 <br />
 
