@@ -9,20 +9,22 @@ published: true
 price: 0
 
 chapters:
-    - 00_intro
-    - 01_environment-setup
-    - 02_base-setup
-    - 03_game-base-setup
-    - 04_map-and-robot-setup
-    - 05_chatgpt-api
-    - 06_game-overview
-    - 07_play-game-standard
-    - 08_play-game-hard
-    - 09_2nd-question
-    - 10_what-is-ai
-    - 11_3nd-question
-    - 12_ai-trivia
-    - 13_create-original-map
-    - 14_cline-setup
-    - 15_cline-original-map
-    - 16_summary
+  - 00_intro
+  - 01_common-environment-setup
+  - 02_common-base-setup
+  - 03_1st-game-setup
+  - 04_1st-game-map-and-robot-setup
+  - 05_1st-game-chatgpt-api
+  - 06_1st-game-overview
+  - 07_1st-game-tutorial
+  - 08_1st-game
+  - 09_2nd-game-setup
+  - 10_2nd-game
+  - 10_tips-what-is-ai
+  - 11_3nd-game-setup
+  - 11_3nd-game
+  - 12_tips-ai-trivia
+  - 13_advanced-create-original-map
+  - 14_advanced-cline-setup
+  - 15_advanced-cline-original-map
+  - 16_outro
