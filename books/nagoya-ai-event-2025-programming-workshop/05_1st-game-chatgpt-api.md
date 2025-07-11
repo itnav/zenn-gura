@@ -87,14 +87,14 @@ https://zenn.dev/umi_mori/books/chatbot-chatgpt/viewer/how_to_use_openai_api#api
 
 ## API キーを使う上での注意点
 
-:::message alert
-ChatGPT の API キーは、絶対に公開してはいけません。
-:::
-
 ChatGPT の API キーは絶対に公開してはいけません！\
 悪意のあるユーザーによって API が利用され、大量の請求が発生してしまう可能性があります。
 
 そのため、今回作成したものを Web サイト上に公開する場合は、ChatGPT にリクエストを送る処理をサーバーサイドで行い、そのサーバーサイドの API を呼び出すようにする必要があります！
+
+:::message alert
+ChatGPT の API キーの取り扱いには十分注意してください！
+:::
 
 <br />
 

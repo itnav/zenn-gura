@@ -55,10 +55,6 @@ touch map-1/style.css
 
 :::
 
-コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
-
-![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/02_created-files-and-folders.png)
-
 :::details 【深く知りたい人向け】コマンドの解説
 
 **PowerShell**
@@ -84,6 +80,10 @@ touch map-1/style.css
 - `map-1/`: フォルダの中にファイルを作成
 
 :::
+
+コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
+
+![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/02_created-files-and-folders.png)
 
 <br />
 
@@ -393,6 +393,7 @@ export const routePrompt = `
 - **Mac の場合**: `⌘ (Command) + s`
 
 で行えます！
+<br />
 
 ### 2. VSCode の「Go Live」ボタンをクリック
 
@@ -403,6 +404,7 @@ export const routePrompt = `
 :::message
 「Go Live」ボタンが見つからない場合は、拡張機能「Live Server」がインストールされていない可能性があります。スタッフに声をかけてください。
 :::
+<br />
 
 ### 3. ブラウザで「map-1」フォルダを選択
 
