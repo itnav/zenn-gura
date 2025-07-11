@@ -85,10 +85,6 @@ touch secret.js
 
 :::
 
-コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
-
-![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/02_base-setup/06_created-files-and-folders.png)
-
 :::details 【深く知りたい人向け】コマンドの解説
 
 **PowerShell**
@@ -114,6 +110,10 @@ touch secret.js
   - ファイルが存在する場合はタイムスタンプを更新
 
 :::
+
+コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
+
+![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/02_base-setup/06_created-files-and-folders.png)
 
 <br />
 
