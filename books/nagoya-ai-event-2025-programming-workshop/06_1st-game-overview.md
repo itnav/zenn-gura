@@ -16,7 +16,7 @@ title: '💛 ゲームについて'
 3.  ロボットが動く命令に変換する
 4.  3D マップ上でロボットが動く
 
-![AIロボットの仕組みを示す図解（日本語 → AI → 命令 → ロボットの動き）](/images/nagoya-ai-event-2025-programming-workshop/06_game-rules/01_game-flow.png)
+![AIロボットの仕組みを示す図解（日本語 → AI → 命令 → ロボットの動き）](/images/nagoya-ai-event-2025-programming-workshop/06_1st-game-overview/01_game-flow.png)
 
 <br />
 

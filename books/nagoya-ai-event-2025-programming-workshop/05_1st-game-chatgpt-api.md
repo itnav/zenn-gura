@@ -21,7 +21,7 @@ API とは "Application Programming Interface" の略で、プログラムから
 
 そして、その「答え」をゲームが解析し、ロボットを動かしているのです！
 
-![API のイラスト](/images/nagoya-ai-event-2025-programming-workshop/05_chatgpt-api/01_chatgpt-api.png)
+![API のイラスト](/images/nagoya-ai-event-2025-programming-workshop/05_1st-game-chatgpt-api/01_chatgpt-api.png)
 
 <br />
 
@@ -74,15 +74,9 @@ https://zenn.dev/umi_mori/books/chatbot-chatgpt/viewer/how_to_use_openai_api#api
 これまでに作成したコードを動かしてみましょう！
 正常に設定が完了すると、実行ボタンを押すことでロボットが無造作に動き始めます！🎉
 
----
-
-> ロボットが動き始めた画像を表示
-
----
+![ロボットが動き始めた画像](/images/nagoya-ai-event-2025-programming-workshop/05_1st-game-chatgpt-api/02_robot-moving.gif)
 
 もし、うまく動かない場合は `secret.js` の API キーが正しく設定されているか、もう一度確認してみてください。
-
-<br />
 
 :::message
 この段階では、まだロボットはお宝に向かって正しく動きません。\
@@ -131,6 +125,8 @@ ChatGPT の API キーは絶対に公開してはいけません！\
 **原因**: `secret.js` ファイルの保存を忘れている可能性があります。
 
 **対処法**: VSCode のタブに「⚪️」（未保存マーク）が表示されていないか確認し、`Ctrl + S`（Windows）または `Cmd + S`（Mac）で保存してください。
+
+<br />
 
 #### パターン２：ブラウザのリロードが必要
 

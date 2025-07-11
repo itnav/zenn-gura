@@ -8,7 +8,7 @@ title: '💛 AI ロボットを動かしてみよう'
 
 AI ロボットへの指示は、`ai-route-prompt.js` というファイルに記述します。
 
-![VS Code の左側サイドバーで map-1 フォルダが展開され ai-route-prompt.js ファイルがハイライトされているスクリーンショット](/images/nagoya-ai-event-2025-programming-workshop/07_play-game-standerd/01_hilighted-ai-route-prompt-file.png)
+![VS Code の左側サイドバーで map-1 フォルダが展開され ai-route-prompt.js ファイルがハイライトされているスクリーンショット](/images/nagoya-ai-event-2025-programming-workshop/07_1st-game-tutorial/01_hilighted-ai-route-prompt-file.png)
 
 1.  左側のファイル一覧から「**map-1**」フォルダを開く
 2.  「**ai-route-prompt.js**」をクリック
@@ -73,18 +73,10 @@ export const routePrompt = `
 
 **対処法**: コード例をよく見て、`routePrompt = ` の後のバッククォートと、最後のバッククォートが正しく配置されているか確認してください。「この ` 記号で囲まれた部分に指示を書くんだよ」と説明してあげると良いでしょう。
 
+<br />
+
 #### パターン２：ファイルの保存忘れ
 
 **原因**: ファイルの保存を忘れている可能性があります。
 
 **対処法**: 前の章と同様に、ファイルが保存されているか確認し、`Ctrl/Cmd + S` で保存してください。
-
-:::
-
-:::details C. ロボットが指示通りに動かない
-
-**原因**: AI が日本語の指示を正しく解釈できていない可能性があります。
-
-**対処法**: 「もっと具体的に書いてみよう」とアドバイスしてみてください。例えば、「下」ではなく「下に」、「4 マス」ではなく「４マス」など、表記を変えてみるのも有効です。
-
-:::

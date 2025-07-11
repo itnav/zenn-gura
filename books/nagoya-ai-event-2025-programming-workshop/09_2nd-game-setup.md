@@ -1,8 +1,8 @@
 ---
-title: '🩵 ２問目のゲーム基盤を作ってみよう'
+title: '🩵 ２問目のゲームを作ってみよう'
 ---
 
-## ２問目のゲーム基盤を作ってみよう
+## ２問目のゲームを作ってみよう
 
 では、ここからさらに一歩踏み込んで、次の課題に挑戦していきましょう！
 今回の課題は、皆さんの知識と論理的思考力をさらに深めるためのものです。
@@ -89,28 +89,51 @@ cp map-1/* map-2/
 `map-2` フォルダの `map.js` ファイルを開いて、以下のマップに変更してください。
 
 ```javascript
+/**
+ * 現在のマップの設定オブジェクトです。
+ *
+ * このオブジェクトのプロパティ値を変更することで、\
+ * マップのレイアウト、スタート/エンド位置、罠の位置を変更できます。
+ *
+ * @type {import("../game").MapConfig}
+ */
 export const mapConfig = {
-  layout: [
-    ['o', 'o', 'o', 'o', 'o', 'o'],
-    ['o', 's', 'n', 'o', 'n', 'o'],
-    ['o', 'o', 'n', 'o', 'n', 'o'],
-    ['o', 'n', 'n', 'n', 'n', 'o'],
-    ['o', 'n', 'o', 'o', 'e', 'o'],
-    ['o', 'o', 'o', 'o', 'o', 'o'],
-  ],
   cell: {
+    s: {
+      type: 'start',
+      color: '#6B7ADB',
+      description: 'スタート地点',
+    },
+    e: {
+      type: 'end',
+      color: '#F59E0B',
+      description: 'お宝の場所',
+    },
+    t: {
+      type: 'trap',
+      color: '#DC2626',
+      description: 'トラップ',
+    },
     o: {
       type: 'object',
-      color: '#333333',
+      color: '#92400E',
+      description: 'オブジェクト（土管）',
     },
     n: {
       type: 'normal',
-      color: '#ffffff',
+      color: '#D4A574',
     },
-    s: { type: 'start', color: '#00ff00' },
-    e: { type: 'end', color: '#ff0000' },
-    t: { type: 'trap', color: '#000000' },
   },
+  layout: [
+    ['s', 'n', 'o', 't', 'n', 'n', 'n', 'n'],
+    ['n', 'n', 'o', 'n', 'n', 'n', 'n', 'n'],
+    ['n', 'n', 'o', 'n', 'n', 'o', 'n', 'n'],
+    ['n', 'n', 'o', 'n', 'n', 'o', 'n', 'n'],
+    ['n', 'n', 'o', 'n', 'n', 'o', 't', 'n'],
+    ['n', 'n', 'o', 'n', 'n', 'o', 'n', 'n'],
+    ['n', 'n', 'n', 'n', 'n', 'o', 'n', 'n'],
+    ['t', 'n', 'n', 'n', 'n', 'o', 'n', 'e'],
+  ],
 };
 ```
 
@@ -124,13 +147,13 @@ export const mapConfig = {
 
 一度、VSCode の右下にある **「Port: 5500」** と書かれたボタンをクリックして、サーバーを停止します。
 
-![Go Live を停止する](../../../images/nagoya-ai-event-2025-programming-workshop/09_2nd-game-setup/01_restart-go-live.png)
+![Go Live を停止する](/images/nagoya-ai-event-2025-programming-workshop/09_2nd-game-setup/01_go-live-button-restart-guide.png)
 
 その後、もう一度「Go Live」ボタンをクリックして、サーバーを再起動してください。
 
 ブラウザが自動で立ち上がり、以下のような画面が表示されたら、 **「map-2」** フォルダをクリックしてください。
 
-![map-2 を選択する](../../../images/nagoya-ai-event-2025-programming-workshop/09_2nd-game-setup/02_select-map-2-folder.png)
+![map-2 を選択する](/images/nagoya-ai-event-2025-programming-workshop/09_2nd-game-setup/02_go-live-browser-file-list.png)
 
 そうすると、先ほど作成した新しいマップが表示されます。
 
@@ -145,13 +168,5 @@ export const mapConfig = {
 **原因**: コマンドの入力ミスや、実行している場所（ディレクトリ）が違う可能性があります。
 
 **対処法**: 前の章（02 章）と同じように、コマンドが正しいか、そして VSCode で正しいフォルダ（`ai-app`）が開かれているか確認してください。`map-2` フォルダが `map-1` と同じ階層に作られているか、VSCode のエクスプローラーで確認してみましょう。
-
-:::
-
-:::details B. 戻る指示がうまく書けない
-
-**原因**: ロボットに「戻る」という動きをどう指示すればいいか、迷ってしまうことがあります。
-
-**対処法**: 「行き止まりに来たら、どうする？」と、現実世界で迷路を解く時のように考えてみましょう。紙に簡単な経路図を描いて、視覚的に理解するのも効果的です。
 
 :::

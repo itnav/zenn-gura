@@ -1,8 +1,8 @@
 ---
-title: '💛 １問目のゲーム基盤を作ってみよう'
+title: '💛 １問目のゲームを作ってみよう'
 ---
 
-## １問目のゲーム基盤を作ってみよう
+## １問目のゲームを作ってみよう
 
 いよいよ、１問目のゲームを作成していきます！\
 コードを書いて、ゲームを表示してみましょう 🚀
@@ -17,7 +17,7 @@ VSCode の下のパネルに「ターミナル」が表示されていること�
 - **Windows の場合**: `Ctrl + j`
 - **Mac 場合**: `⌘ (Command) + j`
 
-![ターミナルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/01_opened-terminal-panel.png)
+![ターミナルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/01_opened-terminal-panel.png)
 
 お使いのパソコンに合わせて、以下のコマンドをコピーしてターミナルに貼り付け、Enter キーを押してください！
 
@@ -57,7 +57,7 @@ touch map-1/style.css
 
 コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
 
-![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/02_created-files-and-folders.png)
+![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/02_created-files-and-folders.png)
 
 :::details 【深く知りたい人向け】コマンドの解説
 
@@ -93,7 +93,7 @@ touch map-1/style.css
 
 ### 1. `index.html`
 
-ゲーム画面（3D マップとロボット）をブラウザ上に表示するためのファイルです！
+ゲーム画面（3D マップとロボット）をブラウザ上に表示するためのファイルです。
 
 :::details ファイルの中身（コピー&ペースト）
 
@@ -138,7 +138,7 @@ touch map-1/style.css
 
 ### 2. `style.css`
 
-ゲーム自体の体裁を整えるためのファイルです！
+ゲーム自体の体裁を整えるためのファイルです。
 
 :::details ファイルの中身（コピー&ペースト）
 
@@ -304,7 +304,7 @@ body {
 
 ### 3. `map.js`
 
-マップの設定を行うファイルです！
+マップの設定を行うファイルです。
 
 :::details ファイルの中身（コピー&ペースト）
 
@@ -359,7 +359,7 @@ export const mapConfig = {
 
 ### 4. `ai-route-prompt.js`
 
-ロボットに指示を出すためのプロンプト（指示）を記述するファイルです！
+ロボットに指示を出すためのプロンプト（指示）を記述するファイルです。
 
 :::details ファイルの中身（コピー&ペースト）
 
@@ -385,7 +385,7 @@ export const routePrompt = `
 まずは全てのファイルが保存されているか確認しましょう！\
 上のタブのファイル名の右端に ⚪️ がついている場合はセーブされていないことを示しています。
 
-![セーブできていないファイルのガイド](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/03_unsaved-files.png)
+![セーブできていないファイルのガイド](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/03_unsaved-files.png)
 
 ファイルのセーブは、
 
@@ -398,7 +398,7 @@ export const routePrompt = `
 
 続いて、VSCode の右下の「Go Live」ボタンをクリックします。
 
-![Go Live ボタンの位置](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/04_go-live-button-guide.png)
+![Go Live ボタンの位置](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/04_go-live-button-guide.png)
 
 :::message
 「Go Live」ボタンが見つからない場合は、拡張機能「Live Server」がインストールされていない可能性があります。スタッフに声をかけてください。
@@ -408,15 +408,11 @@ export const routePrompt = `
 
 「Go Live」ボタンをクリックすると、ブラウザが起動し以下のような画面が表示されます！
 
-![ブラウザでファイル一覧が表示されている画面](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/05_go-live-browser-file-list.png)
+![ブラウザでファイル一覧が表示されている画面](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/05_go-live-browser-file-list.png)
 
 この画面で map-1 フォルダをクリックすると...？
 
----
-
-> 3D マップが表示されたゲーム画面のスクリーンショット
-
----
+![ゲームの表示画面](/images/nagoya-ai-event-2025-programming-workshop/04_1st-game-setup/06_game-view.png)
 
 3D マップとロボットが表示されたら成功です！🎉
 
@@ -465,6 +461,8 @@ export const routePrompt = `
 **原因**: JavaScript でエラーが発生している可能性が高いです。
 
 **対処法**: まず、ブラウザの「開発者ツール」を開いて「コンソール」タブを確認しましょう！Windows/Mac ともに `F12` キーを押すか、画面上で右クリックして「検証」または「開発者ツール」を選択し、「コンソール」タブを開いてください。赤いエラーメッセージが表示されていないか確認します。特に `Failed to load module script:` や `Uncaught SyntaxError` などのエラーが出ていないか見てみましょう。他の JavaScript ファイル（`game.js`など）のコピー＆ペーストが間違っている可能性があるので、再度コピーし直してみてください。
+
+<br />
 
 #### パターン２：ブラウザのキャッシュ
 
