@@ -34,7 +34,7 @@ title: '💛 １問目をクリアしよう！'
 
 ```javascript
 export const routePrompt = `
-    1. スタート地点からオブジェクトまでまっすぐ下に進みます。
+    1. 下の土管まで進んでください。
 `;
 ```
 
@@ -44,7 +44,7 @@ export const routePrompt = `
 
 ```javascript
 export const routePrompt = `
-    1. スタート地点からオブジェクトまでまっすぐ下に進みます。
+    1. 下の土管まで進んでください。
 
     ... この先は自分で考えてみよう！！ ...
 `;
