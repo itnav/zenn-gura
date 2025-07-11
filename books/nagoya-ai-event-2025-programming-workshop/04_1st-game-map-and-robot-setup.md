@@ -93,6 +93,8 @@ touch map-1/style.css
 
 ### 1. `index.html`
 
+ゲーム画面（3D マップとロボット）をブラウザ上に表示するためのファイルです！
+
 :::details ファイルの中身（コピー&ペースト）
 
 ```html
@@ -100,28 +102,20 @@ touch map-1/style.css
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
-    <title>Map 1</title>
+    <title>🤖 お宝探しゲーム</title>
     <link rel="stylesheet" href="./style.css" />
     <script type="module" defer>
-      import { OPENAI_API_KEY } from '../../secret.js';
-      import { fetchRoutePathWithOpenAI } from '../../ai-fetch.js';
-      import { generateSystemPrompt } from '../../ai-system-prompt.js';
+      import {
+        fetchRoutePathWithOpenAI,
+        generateSystemPrompt,
+      } from '../../ai.js';
       import { setupGame } from '../../game.js';
+      import { OPENAI_API_KEY } from '../../secret.js';
       import { routePrompt } from './ai-route-prompt.js';
       import { mapConfig } from './map.js';
 
-      // DOM 要素の取得
-      const gameViewerEl = document.getElementById('game-viewer');
-      const responseViewerEl = document.getElementById(
-        'game-ai-response-viewer'
-      );
-      const triggerEl = document.getElementById('game-trigger');
-
       // ゲームをセットアップ
       await setupGame({
-        gameViewerEl,
-        responseViewerEl,
-        triggerEl,
         mapConfig,
         pathFetcher: () =>
           fetchRoutePathWithOpenAI({
@@ -132,10 +126,9 @@ touch map-1/style.css
       });
     </script>
   </head>
-
   <body>
     <div id="game-viewer"></div>
-    <div id="game-ai-response-viewer"></div>
+    <div id="game-response-viewer"></div>
     <button id="game-trigger"></button>
   </body>
 </html>
@@ -145,9 +138,17 @@ touch map-1/style.css
 
 ### 2. `style.css`
 
+ゲーム自体の体裁を整えるためのファイルです！
+
 :::details ファイルの中身（コピー&ペースト）
 
 ```css
+/**
+ * ##########
+ * ## Core ##
+ * ##########
+ */
+
 html,
 body {
   margin: 0;
@@ -158,95 +159,75 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100svh;
+  overflow: hidden;
+  height: 100svh;
+  padding: 24px;
+  box-sizing: border-box;
 }
+
+/**
+ * ##########################
+ * ## Game Response Viewer ##
+ * ##########################
+ */
 
 #game-viewer {
-  width: 80vw;
-  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  flex: 1;
+  width: 100%;
+}
+
+/**
+ * ##########################
+ * ## Game Response Viewer ##
+ * ##########################
+ */
+
+#game-response-viewer {
+  display: block;
+  width: 100%;
+  max-width: 480px;
   margin-bottom: 24px;
-}
-
-#game-trigger {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 16px;
-  font-size: 14px;
-  border-radius: 6px;
-  background-color: #10b981;
-  border: 1px solid rgba(16, 185, 129, 0.1);
-  color: #fff;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  transform: scale(1);
-}
-
-#game-trigger:hover:not(:disabled) {
-  background-color: #059669;
-  transform: scale(1.05);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#game-trigger:active:not(:disabled) {
-  background-color: #047857;
-  transform: scale(0.98);
-}
-
-#game-trigger:disabled {
-  background-color: #9ca3af;
-  border-color: #d1d5db;
-  cursor: not-allowed;
-  opacity: 0.6;
-  transform: scale(1);
-}
-
-#game-ai-response-viewer {
+  padding: 16px;
+  box-sizing: border-box;
   background-color: #f3f4f6;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  max-width: 400px;
-  min-height: 60px;
-  display: block;
+  overflow-y: auto;
 }
 
-#ai-response-label {
-  font-size: 12px;
+#game-response-viewer-label {
   color: #6b7280;
+  font-size: 12px;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
-#ai-response {
-  font-size: 24px;
-  color: #1f2937;
-  font-weight: 500;
-  letter-spacing: 4px;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  min-height: 32px;
+#game-response-viewer-content {
   display: flex;
   align-items: center;
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  transition: opacity 0.3s ease-in-out;
+  opacity: 0;
 }
 
-#ai-response.visible {
+#game-response-viewer-content.visible {
   opacity: 1;
 }
 
-#ai-response span {
+#game-response-viewer-content span {
   display: inline-block;
   opacity: 0;
-  animation: fadeInArrow 0.4s ease-in-out forwards;
+  animation: gameResponseViewerContentFadeInArrow 0.4s ease-in-out forwards;
 }
 
-@keyframes fadeInArrow {
+@keyframes gameResponseViewerContentFadeInArrow {
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -257,18 +238,62 @@ body {
   }
 }
 
-.spinner {
+/**
+ * ##################
+ * ## Game Trigger ##
+ * ##################
+ */
+
+#game-trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 480px;
+  min-height: 48px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid rgba(62, 159, 120, 0.1);
+  background-color: #3e9f78;
+  cursor: pointer;
+  transform: scale(1);
+  transition: all 0.2s ease-in-out;
+}
+
+#game-trigger:hover:not(:disabled) {
+  background-color: #358862;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: scale(1.02);
+}
+
+#game-trigger:active:not(:disabled) {
+  background-color: #2c7150;
+  transform: scale(0.98);
+}
+
+#game-trigger:disabled {
+  background-color: #9ca3af;
+  border-color: #d1d5db;
+  cursor: not-allowed;
+  transform: scale(1);
+  opacity: 0.6;
+}
+
+#game-trigger .spinner {
   display: inline-block;
   width: 16px;
   height: 16px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-top-color: #fff;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-right: 8px;
+  animation: gameTriggerSpinner 0.8s linear infinite;
 }
 
-@keyframes spin {
+@keyframes gameTriggerSpinner {
   to {
     transform: rotate(360deg);
   }
@@ -279,18 +304,46 @@ body {
 
 ### 3. `map.js`
 
+マップの設定を行うファイルです！
+
 :::details ファイルの中身（コピー&ペースト）
 
 ```javascript
 /**
- * 現在のマップの設定オブジェクトです。
+ * マップの設定オブジェクトです。
  *
- * このオブジェクトのプロパティ値を変更することで、\
- * マップのレイアウト、スタート/エンド位置、罠の位置を変更できます。
+ * このオブジェクトのプロパティ値を変更することで、
+ * マップのレイアウト、スタートやエンド、トラップやオブジェクトの位置を変更できます。
  *
  * @type {import("../game").MapConfig}
  */
 export const mapConfig = {
+  cell: {
+    s: {
+      type: 'start',
+      color: '#6B7ADB',
+      description: 'スタート地点',
+    },
+    e: {
+      type: 'end',
+      color: '#F59E0B',
+      description: 'お宝の場所',
+    },
+    t: {
+      type: 'trap',
+      color: '#DC2626',
+      description: 'トラップ',
+    },
+    o: {
+      type: 'object',
+      color: '#92400E',
+      description: 'オブジェクト（土管）',
+    },
+    n: {
+      type: 'normal',
+      color: '#D4A574',
+    },
+  },
   layout: [
     ['s', 'n', 'n', 'n', 'n', 't'],
     ['n', 'n', 'o', 'n', 'n', 'n'],
@@ -299,34 +352,14 @@ export const mapConfig = {
     ['n', 'n', 'n', 'n', 'n', 'n'],
     ['o', 'n', 'n', 'n', 'n', 'e'],
   ],
-  cell: {
-    s: {
-      type: 'start',
-      color: '#6B7ADB',
-    },
-    e: {
-      type: 'end',
-      color: '#F59E0B',
-    },
-    t: {
-      type: 'trap',
-      color: '#DC2626',
-    },
-    o: {
-      type: 'object',
-      color: '#92400E',
-    },
-    n: {
-      type: 'normal',
-      color: '#D4A574',
-    },
-  },
 };
 ```
 
 :::
 
 ### 4. `ai-route-prompt.js`
+
+ロボットに指示を出すためのプロンプト（指示）を記述するファイルです！
 
 :::details ファイルの中身（コピー&ペースト）
 

@@ -57,20 +57,18 @@ VSCode の下のパネルに、コマンドを入力するための「ターミ�
 **PowerShell(Windows) の場合**
 
 ```powershell
+New-Item -ItemType File -Name "ai.js"
+New-Item -ItemType File -Name "app.js"
 New-Item -ItemType File -Name "game.js"
-New-Item -ItemType File -Name "game-model.js"
-New-Item -ItemType File -Name "ai-fetch.js"
-New-Item -ItemType File -Name "ai-system-prompt.js"
 New-Item -ItemType File -Name "secret.js"
 ```
 
 :::details コマンドプロンプト(Windows) の場合
 
 ```bash
+type nul > ai.js
+type nul > app.js
 type nul > game.js
-type nul > game-model.js
-type nul > ai-fetch.js
-type nul > ai-system-prompt.js
 type nul > secret.js
 ```
 
@@ -79,10 +77,9 @@ type nul > secret.js
 :::details シェル(Mac,Linux) の場合
 
 ```bash
+touch ai.js
+touch app.js
 touch game.js
-touch game-model.js
-touch ai-fetch.js
-touch ai-system-prompt.js
 touch secret.js
 ```
 
@@ -134,10 +131,9 @@ touch secret.js
 
 ```
 .
-├── ai-fetch.js
-├── ai-system-prompt.js
+├── ai.js
+├── app.js
 ├── game.js
-├── game-model.js
 └── secret.js
 ```
 
