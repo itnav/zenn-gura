@@ -12,8 +12,8 @@ chapters:
   - 00_intro
   - 01_common-environment-setup
   - 02_common-base-setup
-  - 03_1st-game-setup
-  - 04_1st-game-map-and-robot-setup
+  - 03_common-core-setup
+  - 04_1st-game-setup
   - 05_1st-game-chatgpt-api
   - 06_1st-game-overview
   - 07_1st-game-tutorial

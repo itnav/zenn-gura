@@ -1,10 +1,10 @@
 ---
-title: '💛 １問目のゲーム基盤を作ってみよう'
+title: '🤎 共通ファイルの実装'
 ---
 
-## １問目のゲーム基盤を作ってみよう
+## 共通ファイルの実装
 
-それでは、さっそく第１問のゲーム基盤を作成していきましょう！
+続いて、すべての問題に共通して使うファイルの中身を実装します！
 
 <br />
 
@@ -14,6 +14,14 @@ title: '💛 １問目のゲーム基盤を作ってみよう'
 以前の章で作成したファイルがあることを確認しましょう 🔥
 
 ![VSCodeのファイル一覧](/images/nagoya-ai-event-2025-programming-workshop/03_game-base-setup/01_vscode-file-list.png)
+
+<br />
+
+## 進め方のおさらい
+
+Zenn の記事では、コードブロックの右上に表示されるコピーボタンを使って、コードをコピー＆ペーストで進めていきます！
+
+![コピペガイド](/images/nagoya-ai-event-2025-programming-workshop/03_game-base-setup/02_copy-paste-guide.png)
 
 <br />
 
@@ -1988,6 +1996,615 @@ ChatGPT を利用するための機密情報を記述するファイルです！
  *       ローカルで起動して使用する場合は問題ないのですが、Web サイトとして公開する場合などは、API Key を必要としている処理をサーバーサイドで記述するなど、API Key は隠す必要があります。
  */
 export const OPENAI_API_KEY = 'sk-ここに配布されたAPIキーを入力';
+```
+
+:::
+
+### 5. `index.html`
+
+ゲームの画面を構成するファイルです。
+
+:::details ファイルの中身（コピー&ペースト）
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Robot Game</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-viewer {
+        width: 500px;
+        height: 500px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .game-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+
+      #game-trigger {
+        padding: 12px 25px;
+        font-size: 1.1em;
+        color: #fff;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.1s ease;
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+      }
+
+      #game-trigger:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+      }
+
+      #game-trigger:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #ffffff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #game-response-viewer {
+        width: 100%;
+        max-width: 500px;
+        background-color: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 15px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      #game-response-viewer-label {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #555;
+      }
+
+      #game-response-viewer-content {
+        min-height: 24px; /* 1行分の高さを確保 */
+        color: #007bff;
+        font-size: 1.2em;
+        font-weight: bold;
+        word-break: break-all; /* 長い文字列の折り返し */
+      }
+
+      #game-response-viewer-content span {
+        opacity: 0;
+        animation: fadeIn 0.5s forwards;
+        display: inline-block; /* 各文字を個別にアニメーション */
+      }
+
+      #game-response-viewer-content.visible span {
+        opacity: 1;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Robot Game</h1>
+    <div class="game-container">
+      <div id="game-viewer" class="game-viewer"></div>
+      <div class="game-controls">
+        <button id="game-trigger"></button>
+        <div id="game-response-viewer"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { setupGame } from './game.js';
+      import { fetchRoutePathWithOpenAI } from './ai.js';
+      import { OPENAI_API_KEY } from './secret.js';
+
+      // マップ設定
+      const mapConfig = {
+        layout: [
+          ['s', 'n', 'n', 'n', 'n'],
+          ['n', 'o', 'n', 't', 'n'],
+          ['n', 'n', 'n', 'n', 'n'],
+          ['n', 't', 'n', 'o', 'n'],
+          ['n', 'n', 'n', 'n', 'e'],
+        ],
+        cell: {
+          s: { type: 'start', color: '#aaffaa', description: 'スタート地点' },
+          e: { type: 'end', color: '#ffaaaa', description: 'ゴール地点' },
+          t: { type: 'trap', color: '#aaaaaa', description: 'トラップ' },
+          o: { type: 'object', color: '#aaaaff', description: '障害物' },
+          n: { type: 'normal', color: '#ffffff', description: '通常セル' },
+        },
+      };
+
+      // ゲームをセットアップ
+      setupGame({
+        mapConfig,
+        pathFetcher: async () => {
+          // AIに経路を問い合わせるプロンプト
+          const routePrompt = `
+マップのスタート地点からゴール地点まで移動してください。
+ただし、トラップ（t）と障害物（o）は避けてください。
+移動は「↑」「↓」「←」「→」の記号のみを使用し、連続して出力してください。
+`;
+          const moves = await fetchRoutePathWithOpenAI({
+            apiKey: OPENAI_API_KEY,
+            routePrompt: routePrompt,
+            systemPrompt: '', // generateSystemPrompt は ai.js 内部で実行される
+          });
+          return moves;
+        },
+      });
+    </script>
+  </body>
+</html>
+```
+
+:::
+
+### 5. `index.html`
+
+ゲームの画面を構成するファイルです。
+
+:::details ファイルの中身（コピー&ペースト）
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Robot Game</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-viewer {
+        width: 500px;
+        height: 500px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .game-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+
+      #game-trigger {
+        padding: 12px 25px;
+        font-size: 1.1em;
+        color: #fff;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.1s ease;
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+      }
+
+      #game-trigger:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+      }
+
+      #game-trigger:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #ffffff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #game-response-viewer {
+        width: 100%;
+        max-width: 500px;
+        background-color: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 15px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      #game-response-viewer-label {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #555;
+      }
+
+      #game-response-viewer-content {
+        min-height: 24px; /* 1行分の高さを確保 */
+        color: #007bff;
+        font-size: 1.2em;
+        font-weight: bold;
+        word-break: break-all; /* 長い文字列の折り返し */
+      }
+
+      #game-response-viewer-content span {
+        opacity: 0;
+        animation: fadeIn 0.5s forwards;
+        display: inline-block; /* 各文字を個別にアニメーション */
+      }
+
+      #game-response-viewer-content.visible span {
+        opacity: 1;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Robot Game</h1>
+    <div class="game-container">
+      <div id="game-viewer" class="game-viewer"></div>
+      <div class="game-controls">
+        <button id="game-trigger"></button>
+        <div id="game-response-viewer"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { setupGame } from './game.js';
+      import { fetchRoutePathWithOpenAI } from './ai.js';
+      import { OPENAI_API_KEY } from './secret.js';
+
+      // マップ設定
+      const mapConfig = {
+        layout: [
+          ['s', 'n', 'n', 'n', 'n'],
+          ['n', 'o', 'n', 't', 'n'],
+          ['n', 'n', 'n', 'n', 'n'],
+          ['n', 't', 'n', 'o', 'n'],
+          ['n', 'n', 'n', 'n', 'e'],
+        ],
+        cell: {
+          s: { type: 'start', color: '#aaffaa', description: 'スタート地点' },
+          e: { type: 'end', color: '#ffaaaa', description: 'ゴール地点' },
+          t: { type: 'trap', color: '#aaaaaa', description: 'トラップ' },
+          o: { type: 'object', color: '#aaaaff', description: '障害物' },
+          n: { type: 'normal', color: '#ffffff', description: '通常セル' },
+        },
+      };
+
+      // ゲームをセットアップ
+      setupGame({
+        mapConfig,
+        pathFetcher: async () => {
+          // AIに経路を問い合わせるプロンプト
+          const routePrompt = `
+マップのスタート地点からゴール地点まで移動してください。
+ただし、トラップ（t）と障害物（o）は避けてください。
+移動は「↑」「↓」「←」「→」の記号のみを使用し、連続して出力してください。
+`;
+          const moves = await fetchRoutePathWithOpenAI({
+            apiKey: OPENAI_API_KEY,
+            routePrompt: routePrompt,
+            systemPrompt: '', // generateSystemPrompt は ai.js 内部で実行される
+          });
+          return moves;
+        },
+      });
+    </script>
+  </body>
+</html>
+```
+
+:::
+
+### 5. `index.html`
+
+ゲームの画面を構成するファイルです。
+
+:::details ファイルの中身（コピー&ペースト）
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Robot Game</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      h1 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .game-viewer {
+        width: 500px;
+        height: 500px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: #e0e0e0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .game-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+
+      #game-trigger {
+        padding: 12px 25px;
+        font-size: 1.1em;
+        color: #fff;
+        background-color: #28a745;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.1s ease;
+        box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+      }
+
+      #game-trigger:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+      }
+
+      #game-trigger:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+
+      .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top: 4px solid #ffffff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #game-response-viewer {
+        width: 100%;
+        max-width: 500px;
+        background-color: #f9f9f9;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        padding: 15px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      #game-response-viewer-label {
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #555;
+      }
+
+      #game-response-viewer-content {
+        min-height: 24px; /* 1行分の高さを確保 */
+        color: #007bff;
+        font-size: 1.2em;
+        font-weight: bold;
+        word-break: break-all; /* 長い文字列の折り返し */
+      }
+
+      #game-response-viewer-content span {
+        opacity: 0;
+        animation: fadeIn 0.5s forwards;
+        display: inline-block; /* 各文字を個別にアニメーション */
+      }
+
+      #game-response-viewer-content.visible span {
+        opacity: 1;
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Robot Game</h1>
+    <div class="game-container">
+      <div id="game-viewer" class="game-viewer"></div>
+      <div class="game-controls">
+        <button id="game-trigger"></button>
+        <div id="game-response-viewer"></div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { setupGame } from './game.js';
+      import { fetchRoutePathWithOpenAI } from './ai.js';
+      import { OPENAI_API_KEY } from './secret.js';
+
+      // マップ設定
+      const mapConfig = {
+        layout: [
+          ['s', 'n', 'n', 'n', 'n'],
+          ['n', 'o', 'n', 't', 'n'],
+          ['n', 'n', 'n', 'n', 'n'],
+          ['n', 't', 'n', 'o', 'n'],
+          ['n', 'n', 'n', 'n', 'e'],
+        ],
+        cell: {
+          s: { type: 'start', color: '#aaffaa', description: 'スタート地点' },
+          e: { type: 'end', color: '#ffaaaa', description: 'ゴール地点' },
+          t: { type: 'trap', color: '#aaaaaa', description: 'トラップ' },
+          o: { type: 'object', color: '#aaaaff', description: '障害物' },
+          n: { type: 'normal', color: '#ffffff', description: '通常セル' },
+        },
+      };
+
+      // ゲームをセットアップ
+      setupGame({
+        mapConfig,
+        pathFetcher: async () => {
+          // AIに経路を問い合わせるプロンプト
+          const routePrompt = `
+マップのスタート地点からゴール地点まで移動してください。
+ただし、トラップ（t）と障害物（o）は避けてください。
+移動は「↑」「↓」「←」「→」の記号のみを使用し、連続して出力してください。
+`;
+          const moves = await fetchRoutePathWithOpenAI({
+            apiKey: OPENAI_API_KEY,
+            routePrompt: routePrompt,
+            systemPrompt: '', // generateSystemPrompt は ai.js 内部で実行される
+          });
+          return moves;
+        },
+      });
+    </script>
+  </body>
+</html>
 ```
 
 :::
