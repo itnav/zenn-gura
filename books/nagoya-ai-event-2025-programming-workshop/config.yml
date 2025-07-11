@@ -13,19 +13,19 @@ chapters:
   - 01_common-environment-setup
   - 02_common-base-setup
   - 03_common-core-setup
-  - 03_5_ai-system-prompt
-  - 04_1st-game-setup
-  - 05_1st-game-chatgpt-api
-  - 06_1st-game-overview
-  - 07_1st-game-tutorial
-  - 08_1st-game
-  - 09_2nd-game-setup
-  - 10_2nd-game
-  - 11_tips-what-is-ai
-  - 12_3nd-game-setup
-  - 13_3nd-game
-  - 14_tips-ai-trivia
-  - 15_advanced-create-original-map
-  - 16_advanced-cline-setup
-  - 17_advanced-cline-original-map
-  - 18_outro
+  - 04_common-system-prompt
+  - 05_1st-game-setup
+  - 06_1st-game-chatgpt-api
+  - 07_1st-game-overview
+  - 08_1st-game-tutorial
+  - 09_1st-game
+  - 10_2nd-game-setup
+  - 11_2nd-game
+  - 12_tips-what-is-ai
+  - 13_3nd-game-setup
+  - 14_3nd-game
+  - 15_tips-ai-trivia
+  - 16_advanced-create-original-map
+  - 17_advanced-cline-setup
+  - 18_advanced-cline-original-map
+  - 19_outro
