@@ -1,26 +1,26 @@
 ---
-title: '🤖 ゲームの AI を作る'
+title: '🤎 AI ロボットの実装'
 ---
 
-## ゲームの AI を作る
+## AI ロボットの実装
 
-このセクションでは、ゲームの AI をどのように作るのか、特に「システムプロンプト」について一緒に見ていきましょう！
+続いて、AI ロボットの頭の中を作っていきましょう！\
+今回は AI ロボットを「システムプロンプト」を用いて作っていきます！
 
 <br />
 
 ## システムプロンプトってなんだろう？
 
-システムプロンプトは、AI に「こんな役割で、こんな風に動いてね！」と指示するための、AI へのお願いのようなものです。AI はこのお願いを読んで、どのように応答すべきかを理解します！
+システムプロンプトとは、AI に「こんな役割で、こんな風に動いてね！」と指示するための、AI へのお願いのようなものです。\
+AI はこのお願いを読んで、どのように応答すべきかを理解します！
 
-今回のゲームでは、AI ロボットがマップの中を進んで、みんなの指示通りに動くためのシステムプロンプトを `ai.js` で作っています。このプロンプトには、AI がマップの形や、セルの種類、移動のルール、そしてみんなの「こう動いてほしい！」という気持ちを理解するための情報が全部入っているんですよ。
-
-システムプロンプトが長すぎると、AI が一度にたくさんの情報を処理しきれなくなって、うまくお返事できなかったり、エラーが出たりすることがあります。だから、システムプロンプトは短く、分かりやすく書くことが大切なんですよ。
+このゲームでは、AI ロボットがマップを動くためのシステムプロンプトを `ai.js` で作っています。プロンプトにはマップや移動ルールなど、AI が動くための情報が入っています・
 
 <br />
 
-## `ai.js` の中身を見てみよう！
+## `ai.js` の中身を実装しよう
 
-それでは、`ai.js` の中身をコピー＆ペーストしてみましょう。このファイルには、AI のシステムプロンプトを動的に生成するロジックと、OpenAI API を呼び出して AI から経路を取得する関数が含まれています。
+それでは、`ai.js` の中身をコピー＆ペーストしてみましょう。このファイルには、AI のシステムプロンプトを動的に生成するロジックと、OpenAI API を呼び出して AI から経路を取得するロジックが含まれています。
 
 :::details ファイルの中身（コピー&ペースト）
 
@@ -41,21 +41,29 @@ import { movementKey } from './game.js';
  */
 export function generateSystemPrompt(mapConfig) {
   const result = [
-    '# システムプロンプn',
+    '# システムプロンプト\n',
+    // 1. 基本設定（役割、ユーザー理解、座標系）
     generateRoleSection(),
-    generateCoordinateSection(),
+    generateUserRoleSection(),
+    generateCoordinateSection(mapConfig),
+    // 2. マップ理解（セルタイプ、記号定義、レイアウト）
     generateCellTypeSection(),
     generateMapSymbolSection(mapConfig),
     generateMapLayoutSection(mapConfig),
-    generateUserRoleSection(),
-    generateLimitedInformationSection(),
+    // 3. 移動ルール（基本ルール、方向解釈、特殊な指示）
+    generateMovementRulesSection(mapConfig),
     generateNumericalUnderstandingSection(),
-    generateStepByStepSection(),
     generateAmbiguousInstructionSection(),
-    generateImplicitInformationSection(),
+    generateStepByStepSection(),
     generateInterpretationPrinciplesSection(),
-    generateExecutionMindsetSection(),
+    // 4. 出力形式（使用可能コマンド、フォーマット）
     generateMovementInstructionSection(),
+    // 5. 重要な注意事項
+    generateImportantWarningSection(),
+    // 6. 具体例（map-1の例を先に示す）
+    generateMap1SuccessExample(),
+    // 7. 具体例（map-2の例）
+    generateMap2SuccessExample(),
   ]
     .filter(Boolean)
     .join('\n\n');
@@ -63,7 +71,11 @@ export function generateSystemPrompt(mapConfig) {
   return result;
 }
 
-/** @ignore */
+/**
+ * あなたの役割セクションを生成。
+ *
+ * @returns {string}
+ */
 function generateRoleSection() {
   return (
     `## あなたの役割\n` +
@@ -74,16 +86,96 @@ function generateRoleSection() {
   );
 }
 
-/** @ignore */
-function generateCoordinateSection() {
+/**
+ * ユーザーの役割理解セクションを生成。
+ *
+ * @returns {string}
+ */
+function generateUserRoleSection() {
+  return (
+    `## ユーザーの役割の理解（重要）\n` +
+    '\n' +
+    `- ユーザーはマップ全体（トラップやゴールの位置を含む）を見ることができます。\n` +
+    `- ユーザーの指示は、あなたには見えない危険を回避し、ゴールへ導くための信頼できるガイドです。\n` +
+    `- 指示が一見遠回りに見えても、それはトラップを避けるためかもしれません。\n` +
+    `- ユーザーの指示に忠実に従ってください。\n` +
+    `- 指示された移動以外の追加の移動は行わないでください。\n`
+  );
+}
+
+/**
+ * 移動ルールと指示解釈セクションを生成。
+ *
+ * @param   {import("./game").MapConfig} mapConfig
+ * @returns {string}
+ */
+function generateMovementRulesSection(mapConfig) {
+  const maxX = mapConfig.layout[0].length - 1;
+  const maxY = mapConfig.layout.length - 1;
+  return (
+    `## 移動ルールと指示の解釈\n` +
+    '\n' +
+    `### オブジェクトへの移動\n` +
+    '\n' +
+    `- オブジェクト（土管）があるマスには進入できません\n` +
+    `- **「オブジェクトまで」という指示は、オブジェクトの1マス手前で停止することを意味します**\n` +
+    '\n' +
+    `#### 例：土管が(2,0)にある場合\n` +
+    `- 「右の土管まで」で(0,0)から移動 → (1,0)で停止（土管の左側）\n` +
+    `- 「下の土管まで」で(2,-1)から移動 → 不可（Y=-1は存在しない）\n` +
+    `- 「上の土管まで」で(2,1)から移動 → (2,0)は土管なので停止できない\n` +
+    `- 「左の土管まで」で(3,0)から移動 → (2,0)は土管なので停止できない\n` +
+    '\n' +
+    `### 方向のオブジェクト検索\n` +
+    '\n' +
+    `**「下のオブジェクト」「右のオブジェクト」などの指示の解釈：**\n` +
+    `- 「下のオブジェクト」= 現在位置よりY座標が大きい（下にある）オブジェクトを探す\n` +
+    `- 「右のオブジェクト」= 現在位置よりX座標が大きい（右にある）オブジェクトを探す\n` +
+    `- 「上のオブジェクト」= 現在位置よりY座標が小さい（上にある）オブジェクトを探す\n` +
+    `- 「左のオブジェクト」= 現在位置よりX座標が小さい（左にある）オブジェクトを探す\n` +
+    '\n' +
+    `**重要：同じX座標やY座標上にある必要はありません。指定された方向にあるオブジェクトを見つけてください。**\n` +
+    '\n' +
+    `### 「一番○○まで」の解釈\n` +
+    '\n' +
+    `**「端」「一番○○の端」「一番○○」などの表現は、すべて座標を維持して移動します。**\n` +
+    '\n' +
+    `- 「一番上の端まで」「一番上まで」= 現在のX座標を維持してY=0まで移動\n` +
+    `- 「一番下の端まで」「一番下まで」= 現在のX座標を維持してY=${maxY}まで移動\n` +
+    `- 「一番右の端まで」「一番右まで」= 現在のY座標を維持してX=${maxX}まで移動\n` +
+    `- 「一番左の端まで」「一番左まで」= 現在のY座標を維持してX=0まで移動\n` +
+    '\n' +
+    `### 番号付き指示の処理\n` +
+    '\n' +
+    `- 1から順番にすべてのステップを実行してください\n` +
+    `- 各ステップの終了位置が次のステップの開始位置になります\n` +
+    `- 途中で止まらず、最後のステップまで必ず実行してください\n` +
+    '\n' +
+    `### 注意事項\n` +
+    '\n' +
+    `- あなたが認識できる情報（オブジェクトの位置など）を手がかりに指示を解釈してください\n` +
+    `- 指示の順序には意味があります。直線的でない経路は、見えない障害物を避けている可能性があります\n`
+  );
+}
+
+/**
+ * 座標系と方向の理解セクションを生成。
+ *
+ * @param   {import("./game").MapConfig} mapConfig
+ * @returns {string}
+ */
+function generateCoordinateSection(mapConfig) {
+  const maxX = mapConfig.layout[0].length - 1;
+  const maxY = mapConfig.layout.length - 1;
   return (
     `## 座標系と方向の理解\n` +
     '\n' +
     `### 座標系の定義\n` +
     '\n' +
     `- 原点: 左上 (0,0)\n` +
-    `- X軸： 左から右へ（0 → 増加）\n` +
-    `- Y軸： 上から下へ（0 → 増加）\n` +
+    `- X軸： 左から右へ（0 → ${maxX}）\n` +
+    `- Y軸： 上から下へ（0 → ${maxY}）\n` +
+    `- マップサイズ: ${maxX + 1} × ${maxY + 1}\n` +
     `\n` +
     '### 方向の理解\n' +
     '\n' +
@@ -94,7 +186,11 @@ function generateCoordinateSection() {
   );
 }
 
-/** @ignore */
+/**
+ * 移動指示と出力形式の統合セクションを生成。
+ *
+ * @returns {string}
+ */
 function generateMovementInstructionSection() {
   return (
     `## 移動指示と出力形式\n` +
@@ -119,14 +215,18 @@ function generateMovementInstructionSection() {
     `\`\`\`\n` +
     '\n' +
     `### 間違った出力例\n` +
-    `- "下に4マス移動してから..." （説明を含む）\n` +
-    `- "↓4→1↓1→5" （数字を含む）\n` +
-    `- "down down down..." （単語を使用）\n` +
-    `- "↓ ↓ ↓ ↓" （スペースを含む）\n`
+    `- \"下に4マス移動してから...\" （説明を含む）\n` +
+    `- \"↓4→1↓1→5\" （数字を含む）\n` +
+    `- \"down down down...\" （単語を使用）\n` +
+    `- \"↓ ↓ ↓ ↓\" （スペースを含む）\n`
   );
 }
 
-/** @ignore */
+/**
+ * セルタイプの説明セクションを生成。
+ *
+ * @returns {string}
+ */
 function generateCellTypeSection() {
   return (
     `## セルタイプの説明\n` +
@@ -140,7 +240,12 @@ function generateCellTypeSection() {
   );
 }
 
-/** @ignore */
+/**
+ * マップレイアウトセクションを生成。
+ *
+ * @param   {import("./game").MapConfig} mapConfig マップ設定のセル定義オブジェクト
+ * @returns {string}
+ */
 function generateMapLayoutSection(mapConfig) {
   // マップより normal タイプのセルを探す
   const normalCell = Object.entries(mapConfig.cell).find(
@@ -160,14 +265,35 @@ function generateMapLayoutSection(mapConfig) {
     })
   );
 
+  // X座標のヘッダーを生成
+  const xHeader = Array.from(
+    { length: maskedLayout[0].length },
+    (_, i) => i
+  ).join(' ');
+
+  // マップの各行を文字列に変換
+  const layoutRows = maskedLayout
+    .map((row, y) => `${y} ${row.join(' ')}`)
+    .join('\n');
+
+  // オブジェクトの位置を列挙
+  const objectPositions = [];
+  mapConfig.layout.forEach((row, y) => {
+    row.forEach((cell, x) => {
+      const cellConfig = mapConfig.cell[cell];
+      if (cellConfig?.type === 'object') {
+        objectPositions.push(`(${x},${y})`);
+      }
+    });
+  });
+
   return (
     `## この固有マップのレイアウトの説明\n` +
     '\n' +
-    `このマップのレイアウトは、Y座標、X座標の順で以下の通りです。\n` +
+    `### マップレイアウト（${maskedLayout[0].length}×${maskedLayout.length}グリッド）\n` +
     `\`\`\`\n` +
-    `${maskedLayout
-      .map((row, i) => `Y=${i}(${i + 1}行目): [${row.join(',')}]`)
-      .join('\n')}\n` +
+    `  ${xHeader}\n` +
+    `${layoutRows}\n` +
     `\`\`\`\n` +
     '\n' +
     `### 座標の読み方\n` +
@@ -178,7 +304,12 @@ function generateMapLayoutSection(mapConfig) {
   );
 }
 
-/** @ignore */
+/**
+ * マップの記号定義セクションを生成。
+ *
+ * @param   {import("./game").MapConfig} mapConfig
+ * @returns {string}
+ */
 function generateMapSymbolSection(mapConfig) {
   let section = `## この固有マップの記号とタイプ定義\n` + '\n';
   for (const [char, config] of Object.entries(mapConfig.cell)) {
@@ -196,35 +327,11 @@ function generateMapSymbolSection(mapConfig) {
   return section;
 }
 
-/** @ignore */
-function generateUserRoleSection() {
-  return (
-    `## ユーザーの役割の理解（重要）\n` +
-    '\n' +
-    `ユーザーはあなたを安全にゴールまで導こうとしています。\n` +
-    `ユーザーの指示は、あなたには見えない危険を回避し、ゴールへ導くための信頼できるガイドです。\n` +
-    `指示が一見遠回りに見えても、それはトラップを避けるためかもしれません。\n` +
-    `ユーザーの指示に忠実に従ってください。\n` +
-    `指示された移動以外の追加の移動は行わないでください。\n`
-  );
-}
-
-/** @ignore */
-function generateLimitedInformationSection() {
-  return (
-    `## 限定的な情報での指示解釈\n` +
-    '\n' +
-    `あなたが認識できる情報（オブジェクトの位置など）を手がかりに指示を解釈してください。\n` +
-    `- 「下のオブジェクトまで」→ 現在位置から下方向にある、認識可能な最も近いオブジェクトを特定\n` +
-    `- 「右に1マス」→ その位置から正確に1マス右へ\n` +
-    `\n` +
-    `### 注意\n` +
-    '\n' +
-    `指示の順序には意味があります。直線的でない経路は、見えない障害物を避けている可能性があります。\n`
-  );
-}
-
-/** @ignore */
+/**
+ * 数値理解セクションを生成。
+ *
+ * @returns {string}
+ */
 function generateNumericalUnderstandingSection() {
   return (
     `## 数値の理解と移動の実行\n` +
@@ -242,31 +349,11 @@ function generateNumericalUnderstandingSection() {
   );
 }
 
-/** @ignore */
-function generateStepByStepSection() {
-  return (
-    `## 段階的な指示の解釈\n` +
-    '\n' +
-    `番号付きの指示がある場合。\n` +
-    `1. 各ステップは前のステップの終了位置から開始\n` +
-    `2. 指示の順序は重要 - 変更してはいけません\n` +
-    `3. 「進めます」「進んでください」などの表現の違いは無視し、移動指示として統一的に解釈\n` +
-    `4. 各ステップの数値指示を正確に実行する\n` +
-    `5. 指示されていない追加の移動は絶対に行わない\n` +
-    `\n` +
-    `### 重要事項\n` +
-    '\n' +
-    `ユーザーの指示通りの移動のみを出力してください。\n` +
-    `\n` +
-    `### 例\n` +
-    '\n' +
-    `指示「1. 下に4マス 2. 右に1マス 3. 下に1マス 4. 右に4マス」の場合。\n` +
-    `- 正しい出力: \`${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}\`\n` +
-    `- 間違った出力: \`${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}\` （余計な下移動を追加）\n`
-  );
-}
-
-/** @ignore */
+/**
+ * 曖昧な指示への対処セクションを生成。
+ *
+ * @returns {string}
+ */
 function generateAmbiguousInstructionSection() {
   return (
     `## 曖昧な指示への対処\n` +
@@ -284,20 +371,39 @@ function generateAmbiguousInstructionSection() {
   );
 }
 
-/** @ignore */
-function generateImplicitInformationSection() {
+/**
+ * 段階的指示解釈セクションを生成。
+ *
+ * @returns {string}
+ */
+function generateStepByStepSection() {
   return (
-    `## 指示に含まれる暗黙的な情報\n` +
+    `## 段階的な指示の解釈\n` +
     '\n' +
-    `ユーザーはあなたを安全にゴールまで導こうとしています。\n` +
-    `ユーザーの指示から以下を推測してください。\n` +
-    `- 特定の順序での移動 → その経路上に障害物がない\n` +
-    `- 迂回するような指示 → 直線経路上に障害物がある可能性\n` +
-    `- オブジェクトを目印にした指示 → そのオブジェクトまでは安全\n`
+    `番号付きの指示がある場合。\n` +
+    `1. 各ステップは前のステップの終了位置から開始\n` +
+    `2. 指示の順序は重要 - 変更してはいけません\n` +
+    `3. 「進めます」「進んでください」などの表現の違いは無視し、移動指示として統一的に解釈\n` +
+    `4. 各ステップの数値指示を正確に実行する\n` +
+    `5. 指示されていない追加の移動は絶対に行わない\n` +
+    '\n' +
+    `### 重要事項\n` +
+    '\n' +
+    `ユーザーの指示通りの移動のみを出力してください。\n` +
+    '\n' +
+    `### 例\n` +
+    '\n' +
+    `指示「1. 下に4マス 2. 右に1マス 3. 下に1マス 4. 右に4マス」の場合。\n` +
+    `- 正しい出力: \`${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}\`\n` +
+    `- 間違った出力: \`${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}\` （余計な下移動を追加）\n`
   );
 }
 
-/** @ignore */
+/**
+ * 指示解釈の原則セクションを生成。
+ *
+ * @returns {string}
+ */
 function generateInterpretationPrinciplesSection() {
   return (
     `## 指示解釈の重要な原則\n` +
@@ -309,15 +415,170 @@ function generateInterpretationPrinciplesSection() {
   );
 }
 
-/** @ignore */
-function generateExecutionMindsetSection() {
+/**
+ * 重要な注意事項セクションを生成。
+ *
+ * @returns {string}
+ */
+function generateImportantWarningSection() {
   return (
-    `## 実行時の心構え\n` +
+    `## ⚠️ 重要な注意事項 ⚠️\n` +
     '\n' +
-    `1. ユーザーの指示を信頼し、正確に実行する\n` +
-    `2. 見える情報（オブジェクトの位置）を活用して指示を解釈\n` +
-    `3. 指示の背後にある意図（障害物回避）を意識する\n` +
-    `4. しかし、指示されていない「最適化」は行わない\n`
+    `**以下は参考例ですが、絶対にこの例に囚われないでください！**\n` +
+    '\n' +
+    `- **ユーザーの指示が例と異なっても、必ずユーザーの指示を優先してください**\n` +
+    `- **同じマップでも、ユーザーは違う経路や解釈を求めているかもしれません**\n` +
+    `- **例は理解を助けるためだけのもので、ユーザーの意図を曲げる理由にはなりません**\n` +
+    `- **ユーザーの指示を勝手に「修正」したり「最適化」したりしないでください**\n`
+  );
+}
+
+/**
+ * map-1（6x6）の成功例セクションを生成。
+ *
+ * @returns {string}
+ */
+function generateMap1SuccessExample() {
+  return (
+    `## 完全な成功例（6×6グリッド）\n` +
+    '\n' +
+    `### マップレイアウト\n` +
+    `\`\`\`\n` +
+    `  0 1 2 3 4 5\n` +
+    `0 s . . . . t\n` +
+    `1 . . o . . .\n` +
+    `2 . . . . . .\n` +
+    `3 . . . t . .\n` +
+    `4 . . . . . .\n` +
+    `5 o . . . . e\n` +
+    `\n` +
+    `記号説明:\n` +
+    `s = スタート位置 (0,0)\n` +
+    `e = ゴール位置 (5,5)\n` +
+    `o = 土管（オブジェクト）- 通過不可\n` +
+    `. = 通行可能なセル\n` +
+    `t = トラップ（あなたには見えない）\n` +
+    '\n' +
+    `### 指示と正しい解釈\n` +
+    `\`\`\`\n` +
+    `#### 指示\n` +
+    `1. 下の土管まで進んでください。\n` +
+    `2. 一番右まで進んでください。\n` +
+    `3. 一番下まで進んでください。\n` +
+    `\n` +
+    `#### 正しい解釈と移動\n` +
+    `ステップ1: 下の土管まで\n` +
+    `- 開始: (0,0)\n` +
+    `- 下の土管: (0,5)を発見（X=0でY>0のオブジェクト）\n` +
+    `- 土管の手前で停止: (0,4)\n` +
+    `- 移動: ${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}\n` +
+    `\n` +
+    `ステップ2: 一番右まで\n` +
+    `- 開始: (0,4)\n` +
+    `- Y座標4を維持、X=5へ\n` +
+    `- 終了: (5,4)\n` +
+    `- 移動: ${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}\n` +
+    `\n` +
+    `ステップ3: 一番下まで\n` +
+    `- 開始: (5,4)\n` +
+    `- X座標5を維持、Y=5へ\n` +
+    `- 終了: (5,5) [ゴール]\n` +
+    `- 移動: ${movementKey.DOWN}\n` +
+    `\n` +
+    `#### 最終出力\n` +
+    `${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.DOWN}\n` +
+    '\n' +
+    `### 重要なポイント\n` +
+    `1. **「下の土管」= 現在位置より下（Y座標が大きい）にある土管**\n` +
+    `2. **土管は通過不可** - 「土管まで」は手前で停止\n` +
+    `3. **「一番○○まで」は座標を維持して移動**\n` +
+    `4. **各ステップの終了位置が次の開始位置**\n`
+  );
+}
+
+/**
+ * map-2（8x8）の成功例セクションを生成。
+ *
+ * @returns {string}
+ */
+function generateMap2SuccessExample() {
+  return (
+    `## 完全な成功例（8×8グリッド）\n` +
+    '\n' +
+    `### マップレイアウト\n` +
+    `\`\`\`\n` +
+    `  0 1 2 3 4 5 6 7\n` +
+    `0 s . o t . . . .\n` +
+    `1 . . o . . . . .\n` +
+    `2 . . o . . o . .\n` +
+    `3 . . o . . o . .\n` +
+    `4 . . o . . o t .\n` +
+    `5 . . o . . o . .\n` +
+    `6 . . . . . o . .\n` +
+    `7 t . . . . o . e\n` +
+    `\n` +
+    `記号説明:\n` +
+    `s = スタート位置 (0,0)\n` +
+    `e = ゴール位置 (7,7)\n` +
+    `o = 土管（オブジェクト）- 通過不可\n` +
+    `. = 通行可能なセル\n` +
+    `t = トラップ（あなたには見えない）\n` +
+    '\n' +
+    `### 指示と正しい解釈\n` +
+    `\`\`\`\n` +
+    `#### 指示\n` +
+    `1. 右の土管まで進んでください\n` +
+    `2. 一番下の端までまっすぐ進んでください\n` +
+    `3. 右の土管まで進んでください\n` +
+    `4. 一番上の端まで進んでください\n` +
+    `5. 一番右の端まで進んでください\n` +
+    `6. 一番下の端まで進んでください\n` +
+    `\n` +
+    `#### 正しい解釈と移動\n` +
+    `ステップ1: 右の土管まで\n` +
+    `- 開始: (0,0)\n` +
+    `- 右の土管: (2,0)を発見\n` +
+    `- 土管の手前で停止: (1,0)\n` +
+    `- 移動: ${movementKey.RIGHT}\n` +
+    `\n` +
+    `ステップ2: 一番下の端までまっすぐ\n` +
+    `- 開始: (1,0)\n` +
+    `- X座標1を維持、Y=7へ\n` +
+    `- 終了: (1,7)\n` +
+    `- 移動: ${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}\n` +
+    `\n` +
+    `ステップ3: 右の土管まで\n` +
+    `- 開始: (1,7)\n` +
+    `- 右の土管: (5,7)を発見\n` +
+    `- 土管の手前で停止: (4,7)\n` +
+    `- 移動: ${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}\n` +
+    `\n` +
+    `ステップ4: 一番上の端まで（「まっすぐ」なしでも同じ解釈）\n` +
+    `- 開始: (4,7)\n` +
+    `- X座標4を維持、Y=0へ\n` +
+    `- 終了: (4,0)\n` +
+    `- 移動: ${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}\n` +
+    `\n` +
+    `ステップ5: 一番右の端まで（「まっすぐ」なしでも同じ解釈）\n` +
+    `- 開始: (4,0)\n` +
+    `- Y座標0を維持、X=7へ\n` +
+    `- 終了: (7,0)\n` +
+    `- 移動: ${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}\n` +
+    `\n` +
+    `ステップ6: 一番下の端まで（「まっすぐ」なしでも同じ解釈）\n` +
+    `- 開始: (7,0)\n` +
+    `- X座標7を維持、Y=7へ\n` +
+    `- 終了: (7,7) [ゴール]\n` +
+    `- 移動: ${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}\n` +
+    `\n` +
+    `#### 最終出力\n` +
+    `${movementKey.RIGHT}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.UP}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.RIGHT}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}${movementKey.DOWN}\n` +
+    '\n' +
+    `### 重要なポイント\n` +
+    `1. **土管は通過不可** - 「土管まで」は手前で停止\n` +
+    `2. **「まっすぐ」の有無に関わらず、端への移動は座標を維持**\n` +
+    `3. **各ステップの終了位置が次の開始位置**\n` +
+    `4. **すべてのステップを最後まで処理**\n`
   );
 }
 
@@ -420,6 +681,22 @@ export async function fetchRoutePathWithOpenAI({
 }
 ```
 
-:::
+<br />
 
-```
+## ファイルの中身を確認しよう
+
+先ほどと同じように、中身が正しくコピー＆ペーストされているかを確認してみましょう！
+
+<br />
+
+## トラブルシューティング
+
+何か問題が発生した場合は、以下を参考にしてください！
+
+:::details A. コピー＆ペーストがうまくいかない
+
+**原因**: コードブロックの右上にある「コピー」ボタンではなく、手動でドラッグして選択し、範囲を間違えている。
+
+**対処法**: コードブロックの右上にマウスカーソルを合わせると表示されるコピーボタンを使うように案内し、手動での選択を避けるように伝えます。
+
+:::
