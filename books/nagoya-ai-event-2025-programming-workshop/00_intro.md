@@ -14,7 +14,7 @@ title: 'はじめに'
 準備は良いですか？
 さあ、さっそく冒険を始めましょう！🔥
 
-![AI ロボットの写真](/images/nagoya-ai-event-2025-programming-workshop/00_intro/01_ai-robot.jpg)
+![AI ロボットの写真](/images/nagoya-ai-event-2025-programming-workshop/00_intro/01_ai-robot.png)
 
 <br />
 

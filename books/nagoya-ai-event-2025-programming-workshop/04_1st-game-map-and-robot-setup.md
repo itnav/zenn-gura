@@ -21,7 +21,17 @@ VSCode の下のパネルに「ターミナル」が表示されていること�
 
 お使いのパソコンに合わせて、以下のコマンドをコピーしてターミナルに貼り付け、Enter キーを押してください！
 
-**Windows の場合**
+**PowerShell(Windows) の場合**
+
+```powershell
+New-Item -ItemType Directory -Name "map-1"
+New-Item -ItemType File -Path "map-1/ai-route-prompt.js"
+New-Item -ItemType File -Path "map-1/index.html"
+New-Item -ItemType File -Path "map-1/map.js"
+New-Item -ItemType File -Path "map-1/style.css"
+```
+
+:::details コマンドプロンプト(Windows) の場合
 
 ```bash
 mkdir map-1
@@ -31,7 +41,9 @@ type nul > map-1/map.js
 type nul > map-1/style.css
 ```
 
-**Mac の場合**
+:::
+
+:::details シェル(Mac,Linux) の場合
 
 ```bash
 mkdir map-1
@@ -41,9 +53,37 @@ touch map-1/map.js
 touch map-1/style.css
 ```
 
+:::
+
 コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
 
 ![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/04_map-and-robot-setup/02_created-files-and-folders.png)
+
+:::details 【深く知りたい人向け】コマンドの解説
+
+**PowerShell**
+
+- `New-Item -ItemType Directory`: 新しいフォルダを作成
+- `New-Item -ItemType File`: 新しいファイルを作成
+- `-Path`: ファイルのパスを指定（フォルダ名/ファイル名）
+
+<br />
+
+**コマンドプロンプト**
+
+- `mkdir`: 新しいフォルダを作成（make directory）
+- `type nul >`: 空のファイルを作成
+- `map-1/`: フォルダの中にファイルを作成
+
+<br />
+
+**シェル（Mac/Linux）**
+
+- `mkdir`: 新しいフォルダを作成（make directory）
+- `touch`: 空のファイルを作成
+- `map-1/`: フォルダの中にファイルを作成
+
+:::
 
 <br />
 

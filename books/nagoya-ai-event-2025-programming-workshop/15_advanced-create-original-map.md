@@ -1,5 +1,5 @@
 ---
-title: '❤️ オリジナルマップを作ろう'
+title: '🩷 オリジナルマップを作ろう'
 ---
 
 ## オリジナルマップを作ろう
@@ -20,19 +20,57 @@ VSCode の下のパネルに「ターミナル」が表示されていること�
 
 お使いのパソコンに合わせて、以下のコマンドをコピーしてターミナルに貼り付け、Enter キーを押してください！
 
-**Windows の場合**
+**PowerShell(Windows) の場合**
+
+```powershell
+New-Item -ItemType Directory -Name "map-original"
+Copy-Item -Path "map-1/*" -Destination "map-original/" -Recurse
+```
+
+:::details コマンドプロンプト(Windows) の場合
 
 ```bash
 mkdir map-original
 copy map-1/* map-original/
 ```
 
-**Mac の場合**
+:::
+
+:::details シェル(Mac,Linux) の場合
 
 ```bash
 mkdir map-original
 cp map-1/* map-original/
 ```
+
+:::
+
+:::details 【深く知りたい人向け】コマンドの解説
+
+**PowerShell**
+- `New-Item -ItemType Directory`: 新しいフォルダを作成
+- `Copy-Item`: ファイルやフォルダをコピー
+  - `-Path "map-1/*"`: map-1 フォルダ内のすべてのファイルを指定
+  - `-Destination`: コピー先を指定
+  - `-Recurse`: サブフォルダも含めてコピー
+
+<br />
+
+**コマンドプロンプト**
+- `mkdir`: 新しいフォルダを作成
+- `copy`: ファイルをコピー
+  - `map-1/*`: map-1 フォルダ内のすべてのファイル
+  - `map-original/`: コピー先のフォルダ
+
+<br />
+
+**シェル（Mac/Linux）**
+- `mkdir`: 新しいフォルダを作成
+- `cp`: ファイルをコピー（copy）
+  - `map-1/*`: map-1 フォルダ内のすべてのファイル（*はワイルドカード）
+  - `map-original/`: コピー先のフォルダ
+
+:::
 
 <br />
 

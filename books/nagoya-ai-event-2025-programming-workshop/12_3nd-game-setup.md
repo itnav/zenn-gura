@@ -1,8 +1,8 @@
 ---
-title: '💜 ３問目のゲーム基盤を作ってみよう！'
+title: '💜 ３問目のゲーム基盤を作ってみよう'
 ---
 
-## ３問目のゲーム基盤を作ってみよう！
+## ３問目のゲーム基盤を作ってみよう
 
 ２問目も見事クリア出来ましたでしょうか！
 
@@ -24,21 +24,62 @@ VSCode の下のパネルに「ターミナル」が表示されていること�
 
 お使いのパソコンに合わせて、以下のコマンドをコピーしてターミナルに貼り付け、Enter キーを押してください！
 
-**Windows の場合**
+**PowerShell(Windows) の場合**
+
+```powershell
+New-Item -ItemType Directory -Name "map-3"
+Copy-Item -Path "map-1/*" -Destination "map-3/" -Recurse
+```
+
+:::details コマンドプロンプト(Windows) の場合
 
 ```bash
 mkdir map-3
 copy map-1\* map-3\
 ```
 
-**Mac の場合**
+:::
+
+:::details シェル(Mac,Linux) の場合
 
 ```bash
 mkdir map-3
 cp map-1/* map-3/
 ```
 
+:::
+
 コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！🎉
+
+:::details 【深く知りたい人向け】コマンドの解説
+
+**PowerShell**
+
+- `New-Item -ItemType Directory`: 新しいフォルダを作成
+- `Copy-Item`: ファイルやフォルダをコピー
+  - `-Path "map-1/*"`: map-1 フォルダ内のすべてのファイルを指定
+  - `-Destination`: コピー先を指定
+  - `-Recurse`: サブフォルダも含めてコピー
+
+<br />
+
+**コマンドプロンプト**
+
+- `mkdir`: 新しいフォルダを作成
+- `copy`: ファイルをコピー
+  - `map-1\*`: map-1 フォルダ内のすべてのファイル（\はパス区切り文字）
+  - `map-3\`: コピー先のフォルダ
+
+<br />
+
+**シェル（Mac/Linux）**
+
+- `mkdir`: 新しいフォルダを作成
+- `cp`: ファイルをコピー（copy）
+  - `map-1/*`: map-1 フォルダ内のすべてのファイル（\*はワイルドカード）
+  - `map-3/`: コピー先のフォルダ
+
+:::
 
 <br />
 

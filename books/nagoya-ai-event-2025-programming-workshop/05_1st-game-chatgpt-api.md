@@ -33,6 +33,7 @@ API とは "Application Programming Interface" の略で、プログラムから
   - Web ブラウザを開かなくても ChatGPT と会話できる
 
 - **プログラムによる柔軟なカスタマイズ**
+
   - JavaScript のコードから ChatGPT に質問を送れる
   - AI の性格や返答の形式を自由に設定できる
   - AI の返答を受け取って、ゲームの動作に反映できる

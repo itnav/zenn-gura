@@ -54,7 +54,17 @@ VSCode の下のパネルに、コマンドを入力するための「ターミ�
 
 お使いのパソコンに合わせて、以下のコマンドをコピーしてターミナルに貼り付け、Enter キーを押してください！
 
-**Windows の場合**
+**PowerShell(Windows) の場合**
+
+```powershell
+New-Item -ItemType File -Name "game.js"
+New-Item -ItemType File -Name "game-model.js"
+New-Item -ItemType File -Name "ai-fetch.js"
+New-Item -ItemType File -Name "ai-system-prompt.js"
+New-Item -ItemType File -Name "secret.js"
+```
+
+:::details コマンドプロンプト(Windows) の場合
 
 ```bash
 type nul > game.js
@@ -64,7 +74,9 @@ type nul > ai-system-prompt.js
 type nul > secret.js
 ```
 
-**Mac の場合**
+:::
+
+:::details シェル(Mac,Linux) の場合
 
 ```bash
 touch game.js
@@ -74,14 +86,35 @@ touch ai-system-prompt.js
 touch secret.js
 ```
 
+:::
+
 コマンドを実行すると、一気に左側のファイル一覧に新しいファイルとフォルダが表示されます。これで冒険の準備は完了です！
 
 ![作成されたフォルダとファイルが表示されている VSCode のサイドバー](/images/nagoya-ai-event-2025-programming-workshop/02_base-setup/06_created-files-and-folders.png)
 
-:::details 【深く知りたい人向け】コマンドの意味
+:::details 【深く知りたい人向け】コマンドの解説
 
-- `type nul`（Windows）: 空のファイルを作成するコマンド
-- `touch`（Mac）: 空のファイルを作成するコマンド
+**PowerShell**
+
+- `New-Item -ItemType File`: 新しいファイルを作成するコマンド
+  - `-ItemType File`: ファイルを作成することを指定
+  - `-Name`: 作成するファイル名を指定
+
+<br />
+
+**コマンドプロンプト**
+
+- `type nul >`: 空のファイルを作成するコマンド
+  - `type nul`: 何も出力しない
+  - `>`: 出力をファイルにリダイレクト（空のファイルが作成される）
+
+<br />
+
+**シェル（Mac/Linux）**
+
+- `touch`: 空のファイルを作成するコマンド
+  - ファイルが存在しない場合は新規作成
+  - ファイルが存在する場合はタイムスタンプを更新
 
 :::
 
