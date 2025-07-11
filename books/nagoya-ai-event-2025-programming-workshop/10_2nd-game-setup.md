@@ -29,7 +29,7 @@ VSCode の下のパネルに 「ターミナル」 が表示されているこ�
 
 ```powershell
 New-Item -ItemType Directory -Name "map-2"
-Copy-Item -Path "map-1/*" -Destination "map-2/" -Recurse
+Copy-Item -Path "map-1\*" -Destination "map-2\" -Recurse
 ```
 
 :::details コマンドプロンプト(Windows) の場合
