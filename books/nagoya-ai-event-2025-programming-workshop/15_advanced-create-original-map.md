@@ -114,7 +114,7 @@ export const mapConfig = {
       color: '#92400E',
       description: 'オブジェクト（土管）',
     },
-    n: {
+    '.': {
       type: 'normal',
       color: '#D4A574',
     },

@@ -13,6 +13,7 @@ chapters:
   - 01_common-environment-setup
   - 02_common-base-setup
   - 03_common-core-setup
+  - 03_5_ai-system-prompt
   - 04_1st-game-setup
   - 05_1st-game-chatgpt-api
   - 06_1st-game-overview

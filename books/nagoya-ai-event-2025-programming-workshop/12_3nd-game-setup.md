@@ -103,7 +103,7 @@ export const mapConfig = {
       type: 'object',
       color: '#333333',
     },
-    n: {
+    '.': {
       type: 'normal',
       color: '#ffffff',
     },
